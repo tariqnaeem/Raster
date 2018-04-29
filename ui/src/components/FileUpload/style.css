@@ -1,9 +1,0 @@
-
-.fileUpload {
-    height: 25px;
-    display: flex;
-}
-
-.fileUpload input.upload {
-    display: none;
-}

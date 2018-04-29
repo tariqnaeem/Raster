@@ -1,6 +1,6 @@
 import { get } from '../services';
 import uuidv4 from 'uuid/v4';
-import { getDiscrepancies } from '../actions';
+
 import { stringify } from 'querystringify';
 import { QUERY } from '../constants';
 
@@ -9,20 +9,7 @@ export const IS_REQUESTING_AUDITS = 'IS_REQUESTING_AUDITS';
 export const REQUEST_AUDITS = 'REQUEST_AUDITS';
 export const REQUEST_AUDITS_ERROR = 'REQUEST_AUDITS_ERROR';
 
-/**
- * Rerun audit over supplied AVCs.
- * 
- * @param {String} file_name
- * @param {String} avcs
- * @return {Function}
- */
-export const rerunAudit = (file_name, avcs) => (
-	getDiscrepancies.request({
-		avcs,
-		fileName: file_name,
-		localGuid: uuidv4(),
-	})
-);
+
 
 /**
  * Request audits from API.
@@ -33,12 +20,14 @@ export const rerunAudit = (file_name, avcs) => (
  * @return {Promise}
  */
 export const requestAudits = (params = {}, limit = 20, offset = 0) => (dispatch) => {
-
-	dispatch(isRequestingAudits());
 	
-	return get('/sql?q='+QUERY.replace("YEAR", '2016'))
+	dispatch(isRequestingAudits());
+	if(params.year){
+		return get('/sql?q='+QUERY.replace("YEAR", params.year ))
 		.then((audits) => dispatch(requestAuditsSuccess(audits)))
 		.catch((error) => dispatch(requestAuditsError(error)));
+	}
+	
 };
 
 /**

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import * as actions from './actions';
 import { getState } from './reducer';
-import DiscrepancyList from '../components/Discrepancies';
+
 
 class Report extends React.Component {
 

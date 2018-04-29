@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import modal from './modal';
+
 import entities from './entities';
 import alert from './alert';
 import notification from './notification';
@@ -14,7 +14,6 @@ const rootReducer = combineReducers({
 	contentViewer,
 	ui: combineReducers({
 		alert,
-		modal,
 		notification,
 	}),
 });

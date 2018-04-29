@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { populateGraph } from '../../actions';
 import Toogle from '../../components/Toogle';
 
 const ToogleGraph = ({ populateGraph}) =>(

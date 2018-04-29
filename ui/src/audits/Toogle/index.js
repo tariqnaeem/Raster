@@ -12,7 +12,7 @@ const ToogleGraph = ({requestAudits}) =>
 		<div>
 			<select id="ddlYear" onChange={loadGraph}>
 					<option value="2016">2016</option>
-					<option value="2015">2015</option>
+					<option value="2011">2011</option>
 			</select>
 		</div>
 	);

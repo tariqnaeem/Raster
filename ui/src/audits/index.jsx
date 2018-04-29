@@ -11,7 +11,7 @@ class Audits extends React.Component {
 		const { isReady, requestAudits } = this.props;
 
 		if (!isReady) {
-			requestAudits();
+			requestAudits({"year":"2016"});
 		}
 	}
 

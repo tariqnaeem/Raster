@@ -1,6 +1,3 @@
-import search from './search/reducer';
-import pagination from './pagination/reducer';
-import { normalize } from './helpers';
 
 import {
 	IS_REQUESTING_AUDITS,
@@ -19,7 +16,7 @@ export const getState = ({ audits = {} }) => audits;
 
 const reducer = (state = initialState, action) => {
 	let updated = initialState;
-
+	
 	switch (action.type) {
 		case IS_REQUESTING_AUDITS:
 			updated = {
@@ -29,7 +26,7 @@ const reducer = (state = initialState, action) => {
 		case REQUEST_AUDITS:
 			updated = {
 				isReady: true,
-				audits: action.audits.map(normalize),
+				audits: action.rows,
 			};
 			break;
 		case REQUEST_AUDITS_ERROR:
@@ -39,9 +36,7 @@ const reducer = (state = initialState, action) => {
 
 	return {
 		...state,
-		...updated,
-		search: search(state.search, action),
-		pagination: pagination(state.pagination, action),
+		...updated
 	};
 };
 
