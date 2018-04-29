@@ -1,0 +1,11 @@
+
+.filter {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 15px;
+    align-items: center;
+}
+
+.filter label {
+    font-weight: normal;
+}

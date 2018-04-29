@@ -1,0 +1,19 @@
+
+.audit-search {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    height: 25px;
+    margin: 0 10px 0 0;
+}
+
+.search-input {
+    padding: 5px;
+    border: 1px solid #CCC;
+    width: 200px;
+}
+
+.search-label {
+    font-weight: normal;
+    padding: 0 10px;
+}

@@ -1,0 +1,14 @@
+
+.header {
+    background-color: #464646;
+    padding: 10px;
+}
+
+.header h2 {
+    font-size: 14px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #A9A9A9;
+    line-height: 20px;
+    padding: 0;
+    margin: 0;
+}

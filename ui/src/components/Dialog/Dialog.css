@@ -1,0 +1,67 @@
+.Modal__Dialog--Overlay {
+  z-index: 10000;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.Modal__Dialog--Overlay:after {
+  display: block;
+  opacity: 0;
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  content: '';
+  background-color: #000;
+  transition: opacity 150ms linear;
+}
+
+.ReactModal__Overlay--after-open.Modal__Dialog--Overlay:after {
+  opacity: 0.57;
+}
+
+.ReactModal__Overlay--before-close.Modal__Dialog--Overlay:after {
+  opacity: 0;
+}
+
+.Modal__Dialog {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.Dialog {
+  display: flex;
+  z-index: 99;
+  justify-content: space-between;
+  width: 600px;
+  margin-bottom: 4px;
+  padding: 20px 24px;
+  border-radius: 2px;
+  color: var(--darkBlack);
+  background: var(--grey50);
+}
+.Dialog__Confirmation {
+  display: flex;
+}
+
+.Dialog__Confirmation--Accept,
+.Dialog__Confirmation--Dismiss {
+  font-weight: 500;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-left: 30px;
+}
+
+.Dialog__Confirmation--Accept {
+  color: var(--failed);
+}
+

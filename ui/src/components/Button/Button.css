@@ -1,0 +1,43 @@
+.Button {
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  color: #eee;
+  background-color: var(--primaryDark);
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
+  border: none;
+  transition: background-color 300ms ease;
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 500;
+  height: 36px;
+  justify-content: center;
+  min-width: 100px;
+}
+.Button--icon {
+  padding: 0 14px 0 10px;
+}
+
+
+.Button:hover {
+  cursor: pointer;
+  background-color: color(var(--primaryDark) alpha(-10%));
+}
+
+.Button--secondary {
+  background-color: var(--secondaryColor);
+}
+.Button--secondary:hover {
+  background-color: color(var(--secondaryColor) alpha(-10%));
+}
+
+.Button--disabled {
+  pointer-events: none;
+  color: var(--grey400);
+  box-shadow: none;
+  background-color: var(--faintBlack);
+}
+
+.Button__Icon {
+  padding-right: 2px;
+}

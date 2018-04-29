@@ -1,0 +1,84 @@
+{
+	"env": {
+		"browser": true,
+		"es6": true,
+		"node": true,
+		"jest": true
+	},
+	"extends": [
+		"eslint:recommended",
+		"plugin:react/recommended"
+	],
+	"parserOptions": {
+		"ecmaFeatures": {
+			"experimentalObjectRestSpread": true,
+			"jsx": true
+		},
+		"sourceType": "module"
+	},
+	"plugins": [
+		"react"
+	],
+	"rules": {
+		"no-console": [
+			"warn"
+		],
+		"react/no-direct-mutation-state": [
+			"warn"
+		],
+		"react/display-name": [
+			"warn"
+		],
+		"react/prop-types": [
+			"warn"
+		],
+		"block-spacing": [
+			"warn",
+			"always"
+		],
+		"comma-dangle": [
+			"warn",
+			"always-multiline"
+		],
+		"indent": [
+			"warn",
+			"tab",
+			{
+				"SwitchCase": 1
+			}
+		],
+		"linebreak-style": [
+			"warn",
+			"unix"
+		],
+		"quotes": [
+			"warn",
+			"single"
+		],
+		"semi": [
+			"warn",
+			"always"
+		],
+		"comma-spacing": [
+			"warn", {
+				"before": false,
+				"after": true
+			}
+		],
+		"arrow-spacing": [
+			"warn"
+		],
+		"space-before-function-paren": [
+			"warn"
+		],
+		"eol-last": [
+			"warn"
+		],
+		"no-trailing-spaces": [
+			"warn"
+		],
+		"no-unused-vars": [
+			"warn"
+		]
+	}
+}

@@ -1,0 +1,25 @@
+.Toaster {
+  width: 600px;
+  z-index: 99;
+  position: absolute;
+  bottom: 0;
+  right: 50%;
+  margin-right: -300px;
+}
+.Toaster__Error {
+  background: #333;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 24px;
+  border-radius: 2px;
+  margin-bottom: 4px;
+}
+
+.Toaster__Error--Dismiss {
+  text-transform: uppercase;
+  color: var(--failed);
+  font-weight: 500;
+  cursor: pointer;
+}
+

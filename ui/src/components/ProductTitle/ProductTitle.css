@@ -1,0 +1,12 @@
+.ProductTitle {
+  font-family: 'Open Sans', sans-serif;
+  color: var(--lightBlack);
+  font-weight: 400;
+  font-size: 22px;
+  letter-spacing: -0.7px;
+
+}
+
+.ProductTitle--sub {
+  font-weight: 300;
+}

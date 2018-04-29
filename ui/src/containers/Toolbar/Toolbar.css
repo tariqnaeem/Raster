@@ -1,0 +1,39 @@
+.Toolbar {
+  justify-content: flex-end;
+  display: flex;
+  align-items: flex-end;
+
+  &__Filters {
+    padding-right: 30px;
+    margin-right: 20px;
+  }
+
+  &__Dates {
+    flex: 0 0 140px;
+  }
+
+  &__Label {
+    display: block;
+    color: var(--lightBlack);
+    font-size: 0.9em;
+  }
+
+  &__Actions {
+    display: flex;
+    padding-right: 0;
+  }
+}
+
+.Toolbar__Actions .Button {
+  margin-left: 5px;
+}
+
+.Toolbar > div {
+  padding: 0 10px;
+}
+
+.Toolbar > div:first-of-type {
+  padding-right: 30px;
+  margin-right: 20px;
+  border-right: 1px solid var(--faintBlack);
+}
