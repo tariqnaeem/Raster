@@ -3127,6 +3127,10 @@ fury@^3.0.0-beta.4:
     minim "^0.19.0"
     minim-parse-result "^0.8.0"
 
+fusioncharts@^3.12.2:
+  version "3.12.2"
+  resolved "https://registry.yarnpkg.com/fusioncharts/-/fusioncharts-3.12.2.tgz#df255ffd39929a1873135892460d5ce59b637176"
+
 gauge@~2.7.3:
   version "2.7.4"
   resolved "https://registry.yarnpkg.com/gauge/-/gauge-2.7.4.tgz#2c03405c7538c39d7eb37b317022e325fb018bf7"
@@ -6240,6 +6244,13 @@ react-flexbox-grid@^1.1.5:
   dependencies:
     flexboxgrid "^6.3.0"
     prop-types "^15.5.8"
+
+react-fusioncharts@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/react-fusioncharts/-/react-fusioncharts-1.0.5.tgz#34ce368e08f6296ca133d91706113fb68636d8d9"
+  dependencies:
+    fusioncharts "^3.12.2"
+    uuid "^3.2.1"
 
 react-input-autosize@^2.0.1:
   version "2.0.1"
