@@ -5,3 +5,9 @@
   height: 100%;
   background: rgb(228, 228, 228);
 }
+
+.align-center {
+  width: 50%; 
+  margin: 0 auto;
+  margin-top: 70px;
+}
