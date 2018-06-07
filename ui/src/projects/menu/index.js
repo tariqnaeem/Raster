@@ -9,6 +9,9 @@ import KeyboardVoice from '@material-ui/icons/KeyboardVoice';
 import Icon from '@material-ui/core/Icon';
 import Save from '@material-ui/icons/Save';
 import Views from '../views';
+import * as actions from '../actions';
+import { connect, compose } from 'react-redux';
+import { getState } from '../reducer';
 
 const styles = theme => ({
   button: {
@@ -34,25 +37,27 @@ class Menu extends React.Component {
   
 }
 render() {
-  const { classes } = this.props;
+  
+  
+ 
   return (
-    <div className="align-center">
+    <div className="align-center top-space">
       <div>
-        <Button variant="contained" color="primary" className={classes.button} onClick={() => { this.setState({view : 'INGEST'}) }}>
+        <Button variant="contained" color="primary"  onClick={() => { this.setState({view : 'INGEST'}) }}>
           Ingest New Project
-          <FileUpload className={classes.rightIcon} />
+          <FileUpload />
         </Button>
-        <Button variant="contained" color="default" className={classes.button} onClick={() => { this.setState({view : 'UNPUBLISH'}) }}>
+        <Button variant="contained" color="default"  onClick={() => { this.setState({view : 'UNPUBLISH'}) }}>
           Manage Unpublished Project
-          <Icon className={classes.rightIcon}>send</Icon>
+          <Icon >send</Icon>
         </Button>
-        <Button variant="contained" size="small" className={classes.button} onClick={() => { this.setState({view : 'PUBLISH'}) }}>
-          <Save className={classNames(classes.leftIcon, classes.iconSmall)} />
+        <Button variant="contained" size="small"  onClick={() => { this.setState({view : 'PUBLISH'}) }}>
+          <Save  />
           Manage Published Project
         </Button>
       </div>
       <div>
-        <Views view={this.state.view} />
+        <Views view={this.state.view} requests={this.props} />
       </div>
     </div>
   );
@@ -64,4 +69,5 @@ Menu.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Menu);
+
+export default connect(getState, actions)(Menu);

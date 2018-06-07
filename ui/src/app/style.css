@@ -9,5 +9,20 @@
 .align-center {
   width: 50%; 
   margin: 0 auto;
+  
+}
+
+.top-space {
   margin-top: 70px;
 }
+
+.align-center-form {
+  width: 30%; 
+  margin: 0 auto;
+  
+}
+
+.top-space-form {
+  margin-top: 50px;
+}
+
