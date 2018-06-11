@@ -19,14 +19,6 @@ export const fetchDiscrepancies = (state) => {
     )
 };
 
-export const populateGraph = (state) => {
-    
-        return denormalize(
-            state.entities.graph,
-            schema.graphListSchema,
-            state.entities
-        )
-    };
 
 
 export const fetchFiles = (state) => {

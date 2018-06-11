@@ -42,9 +42,8 @@ function* fetchEntityWithTimeout(options = DEFAULT, entity, apiFn, args) {
   }
 }
 
-export const getDiscrepanciesFx = fetchEntityWithTimeout.bind(null, null, actions.getDiscrepancies, api.getDiscrepancies);
 
-export const populateGraphFx = fetchEntityWithTimeout.bind(null, null, actions.populateGraph, api.populateGraph);
+
 
 
 function* displayAlert(message) {
@@ -57,29 +56,17 @@ function* hideAlert() {
   yield put(actions.dismissAlert());
 }
 
-function* getDiscrepancies(action) {
-  const { type, ...payload } = action;
-  yield call(getDiscrepanciesFx, { ...payload });
-}
-
-function* populateGraph(action) {
-  const { type, ...payload } = action;
-  yield call(populateGraphFx, { ...payload });
-}
 
 function* loadEntities() {
   yield all([
-    call(getDiscrepancies),
-      call(displayAlert),
-      call(populateGraph)
+    
+      call(displayAlert)
   ]);
 }
 
 export default function* rootSaga() {
   yield all([
     takeEvery(type.ACCEPT_ALERT, hideAlert), //This is here as a placeholder, should be removed when you need a different action on accept alert
-    takeEvery(type.FETCH_DISCREPANCIES[type.REQUEST], getDiscrepancies),
-    takeEvery(type.POPULATE_GRAPH[type.REQUEST], populateGraph),
     takeEvery(type.INIT_BONES, loadEntities)
   ])
 }

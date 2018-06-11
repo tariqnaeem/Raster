@@ -8,22 +8,30 @@ class Views extends React.Component {
   
   render() {
    
-    
-    const view  = this.props.view;
-    const {requestUnPublishProjects, requestPublishProjects, projects}  = this.props.requests;
-  
-    switch(view) {
+    const {       requestUnPublishProjects, 
+                  requestPublishProjects, 
+                  requestUnIngestedProjects, projects}  = this.props.requests;
+      
+    switch(this.props.view) {
+      case "INGEST":
+        console.log(requestUnIngestedProjects({
+          "dataCustodian":"sri",
+          "showAll": true,
+          "showUningested": true
+          }));
+          break;
       case "UNPUBLISH":
         requestUnPublishProjects();
         break;
+        
       case "PUBLISH":
-      requestPublishProjects();
-
+        requestPublishProjects();
+        break;
     }
 
     return (
       <div>
-        {view == "INGEST" ? <Ingest/> : <List data={projects}  view={view}/>}  
+        {this.props.view == "INGEST" ? <Ingest data={projects}/> : <List data={projects}  view={this.props.view}/>}  
       </div>
     );
   }

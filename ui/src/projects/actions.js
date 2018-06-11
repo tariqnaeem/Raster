@@ -1,4 +1,4 @@
-import { get } from '../services';
+import { get, post } from '../services';
 import uuidv4 from 'uuid/v4';
 
 import { stringify } from 'querystringify';
@@ -14,7 +14,24 @@ export const REQUEST_PROJECTS = 'REQUEST_PROJECTS';
 export const PROJECTS_ERROR = 'PROJECTS_ERROR';
 export const IS_REQUESTING_PROJECTS = 'IS_REQUESTING_PROJECTS';
 
+/**
+ * Request Unpublished Projects from API.
+ * 
+ * @param {Object} params
+ * @param {Integer} limit
+ * @param {Integer} offset
+ * @return {Promise}
+ */
+export const requestUnIngestedProjects = (payload) => (dispatch) => {
 
+	dispatch(isRequestingProjects());
+
+	return 	post('RDL-Publish-ListProjects',payload)
+			.then((projects) => dispatch(requestProjectsSuccess(projects)))
+			.catch((error) => dispatch(requestProjectsError(error)));
+	
+	
+};
 
 
 
