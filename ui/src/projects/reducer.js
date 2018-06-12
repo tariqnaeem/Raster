@@ -17,7 +17,7 @@ export const getState = ({ projects = {} }) => projects;
 
 const reducer = (state = initialState, action) => {
 	let updated = initialState;
-	
+
 	switch (action.type) {
 		case IS_REQUESTING_PROJECTS:
 			updated = {
@@ -27,7 +27,7 @@ const reducer = (state = initialState, action) => {
 		case REQUEST_PROJECTS:
 			updated = {
 				isReady: true,
-				projects: action.rows,
+				projects: action.projects,
 			};
 			break;
 		case PROJECTS_ERROR:

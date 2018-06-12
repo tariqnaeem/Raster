@@ -29,8 +29,8 @@ const styles = theme => ({
 });
 
 class Menu extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       view: 'INGEST',
     };
@@ -40,8 +40,6 @@ class Menu extends React.Component {
 
 render() {
   
-  
- 
   return (
     <div className="align-center top-space">
       <div>
@@ -66,10 +64,5 @@ render() {
 }
 
 }
-
-Menu.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
 
 export default connect(getState, actions)(Menu);

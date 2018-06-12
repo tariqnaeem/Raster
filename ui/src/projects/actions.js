@@ -5,14 +5,13 @@ import { stringify } from 'querystringify';
 import { QUERY } from '../constants';
 
 
-export const IS_REQUESTING_AUDITS = 'IS_REQUESTING_AUDITS';
-export const REQUEST_AUDITS = 'REQUEST_AUDITS';
-export const REQUEST_AUDITS_ERROR = 'REQUEST_AUDITS_ERROR';
-
-
 export const REQUEST_PROJECTS = 'REQUEST_PROJECTS';
 export const PROJECTS_ERROR = 'PROJECTS_ERROR';
 export const IS_REQUESTING_PROJECTS = 'IS_REQUESTING_PROJECTS';
+
+
+
+
 
 /**
  * Request Unpublished Projects from API.
@@ -22,11 +21,11 @@ export const IS_REQUESTING_PROJECTS = 'IS_REQUESTING_PROJECTS';
  * @param {Integer} offset
  * @return {Promise}
  */
-export const requestUnIngestedProjects = (payload) => (dispatch) => {
+export const requestUnPublishProjects = (custodian, showAll) => (dispatch) => {
 
 	dispatch(isRequestingProjects());
-
-	return 	post('RDL-Publish-ListProjects',payload)
+	
+	return post('RDL-Publish-ListProjects',{ "dataCustodian": custodian, "showAll": showAll, "showUningested": true })
 			.then((projects) => dispatch(requestProjectsSuccess(projects)))
 			.catch((error) => dispatch(requestProjectsError(error)));
 	
@@ -34,7 +33,6 @@ export const requestUnIngestedProjects = (payload) => (dispatch) => {
 };
 
 
-
 /**
  * Request Unpublished Projects from API.
  * 
@@ -43,11 +41,11 @@ export const requestUnIngestedProjects = (payload) => (dispatch) => {
  * @param {Integer} offset
  * @return {Promise}
  */
-export const requestUnPublishProjects = (params = {}, limit = 20, offset = 0) => (dispatch) => {
+export const requestUnIngestedProjects = (custodian, showAll) => (dispatch) => {
 
 	dispatch(isRequestingProjects());
 	
-	return 	get('/sql?q='+QUERY.replace("YEAR", params.year ))
+	return post('RDL-Publish-ListProjects',{ "dataCustodian": custodian, "showAll": showAll, "showUningested": true })
 			.then((projects) => dispatch(requestProjectsSuccess(projects)))
 			.catch((error) => dispatch(requestProjectsError(error)));
 	
@@ -92,8 +90,10 @@ export const isRequestingProjects = () => ({
  * @return {Object}
  */
 export const requestProjectsSuccess = (projects) => ({
+	
 	type: REQUEST_PROJECTS,
-	...projects,
+	projects: projects
+	
 });
 
 /**

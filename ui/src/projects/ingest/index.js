@@ -60,8 +60,9 @@ class InputAdornments extends React.Component {
   }
 
   render() {
-    const { classes } = this.props;
-
+    
+    const { classes, data } = this.props;
+   
     return (
       <div className="top-space">
         <form className={classes.container} noValidate autoComplete="off">
