@@ -1,10 +1,6 @@
 import { get, post } from '../services';
 import uuidv4 from 'uuid/v4';
 
-import { stringify } from 'querystringify';
-import { QUERY } from '../constants';
-
-
 export const REQUEST_PROJECTS = 'REQUEST_PROJECTS';
 export const PROJECTS_ERROR = 'PROJECTS_ERROR';
 export const IS_REQUESTING_PROJECTS = 'IS_REQUESTING_PROJECTS';
@@ -34,6 +30,25 @@ export const requestUnPublishProjects = (custodian, showAll) => (dispatch) => {
 
 
 /**
+ * Request INGEST Project from API.
+ * 
+ * @param {String} bucketName
+ * @param {String} projectName
+ * @param {String} dataCustodian
+ * @param {String} folder
+ * @return {Promise}
+ */
+export const requestIngestProject = (bucketName, projectName, dataCustodian, folder) => (dispatch) => {
+
+	dispatch(isRequestingProjects());
+	
+	return post('RDL-Ingest-Project', { "bucketName": bucketName, "projectName": projectName, "dataCustodian": dataCustodian, "folder" : folder })
+			.then((projects) => dispatch(requestProjectsSuccess(projects)))
+			.catch((error) => dispatch(requestProjectsError(error)));
+};
+
+
+/**
  * Request Unpublished Projects from API.
  * 
  * @param {Object} params
@@ -52,24 +67,7 @@ export const requestUnIngestedProjects = (custodian, showAll) => (dispatch) => {
 	
 };
 
-/**
- * Request Published Projects from API.
- * 
- * @param {Object} params
- * @param {Integer} limit
- * @param {Integer} offset
- * @return {Promise}
- */
-export const requestPublishProjects = (params = {}, limit = 20, offset = 0) => (dispatch) => {
 
-	dispatch(isRequestingProjects());
-	
-	return 	get('/sql?q='+QUERY.replace("YEAR", params.year ))
-			.then((projects) => dispatch(requestProjectsSuccess(projects)))
-			.catch((error) => dispatch(requestProjectsError(error)));
-	
-	
-};
 
 
 /**

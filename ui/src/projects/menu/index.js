@@ -10,8 +10,9 @@ import Icon from '@material-ui/core/Icon';
 import Save from '@material-ui/icons/Save';
 import Views from '../views';
 import * as actions from '../actions';
-import { connect, compose } from 'react-redux';
+import { connect} from 'react-redux';
 import { getState } from '../reducer';
+
 
 const styles = theme => ({
   button: {
@@ -34,9 +35,7 @@ class Menu extends React.Component {
     this.state = {
       view: 'INGEST',
     };
-  
 }
-
 
 render() {
   

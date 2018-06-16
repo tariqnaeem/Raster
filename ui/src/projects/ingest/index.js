@@ -9,103 +9,87 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
+import Progress from '../progress';
 import React, { Component } from 'react';
+import {ADMIN,BUCKET} from '../../constants';
 
-const styles = theme => ({
-  root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  margin: {
-    margin: theme.spacing.unit,
-  },
-  withoutLabel: {
-    marginTop: theme.spacing.unit * 3,
-  },
-  textField: {
-    flexBasis: 200,
-  },
-});
 
-const ranges = [
-  {
-    value: '0-20',
-    label: '0 to 20',
-  },
-  {
-    value: '21-50',
-    label: '21 to 50',
-  },
-  {
-    value: '51-100',
-    label: '51 to 100',
-  },
-];
+
+
 
 class InputAdornments extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      root: '',
-      custodian: '',
-      project: ''
-    };
-  
+  constructor(props) {
+    super(props);
+    this.create = this.create.bind(this);
+    this.ingest = this.ingest.bind(this);
+    this.state = {};
 }
-  
-  
-
-  handleMouseDownPassword (event) {
-    event.preventDefault();
-  }
-
-  render() {
+  ingest(event,index){
     
-    const { classes, data } = this.props;
-   
+    /*bucketName
+      projectName 
+      dataCustodian 
+      folder */
+  
+      this.props.request.requestIngestProject(BUCKET, this.state["Project" + index], ADMIN, this.state["Root" + index]);
+  }
+  create(){
+    let unIngestedProjects = []
+    var projects = this.props.data;
+    
+    for (let i = 0; i < projects.length; i++) {
+      
+      var project = projects[i].split("/");
+      
+      unIngestedProjects.push(<div>
+        <TextField
+          id={"Root"+i}
+          name={"Root" + i}
+          label="Folder Name"
+          value={this.state["Root" + i] = project[0]}
+          margin="normal"
+          key={"Root"+i}
+          disabled={true}
+        />
+        <TextField
+          id={"Custodian"+i}
+          name={"Custodian" + i}
+          label="Data Custodian"
+          value={this.state["Custodian" + i] = ADMIN}
+          onChange = {(event) => this.setState({ ["Custodian" + i]: event.target.value })}
+          margin="normal"
+          key={"Custodian"+i}
+        />
+        <TextField
+          required
+          id={"Project"+i}
+          label="Project Name"
+          value={this.state["Project" + i]}
+          margin="normal"
+          key={"Project"+i}
+          onChange = {(event) => this.setState({ ["Project" + i]: event.target.value })}
+        />
+        <Button variant="contained" color="primary" key={"Bttn"+i} onClick={event => this.ingest(event, i)}>
+          Ingest
+          <Icon>send</Icon>
+        </Button>
+      </div>)
+    }
+    return unIngestedProjects
+  }
+  
+  render() {
+    console.log(this.props.request);
+    const { data } = this.props;
+  
     return (
       <div className="top-space">
-        <form className={classes.container} noValidate autoComplete="off">
-          <div>
-            <TextField
-              id="root"
-              label="Folder Name"
-              className={classes.textField}
-              value={this.state.root}
-              margin="normal"
-            />
-            <TextField
-              id="custodian"
-              label="Data Custodian"
-              defaultValue=""
-              className={classes.textField}
-              value={this.state.custodian}
-              margin="normal"
-            />
-            <TextField
-              required
-              id="project"
-              label="Project Name"
-              defaultValue=""
-              value={this.state.project}
-              className={classes.textField}
-              margin="normal"
-            />
-          </div>
-          <div className="align-center-form top-space-form">
-            <Button variant="contained" color="primary" className={classes.button}>
-              Publish
-              <Icon className={classes.rightIcon}>send</Icon>
-            </Button>
-          </div>
-        </form>
-      </div>
+      { (data && data.length > 0) ? this.create() : <Progress/>}
+      </div>      
     );
   }
 }
 
-InputAdornments.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
 
-export default withStyles(styles)(InputAdornments);
+
+export default InputAdornments;

@@ -2,7 +2,7 @@ import { get } from '../services';
 import uuidv4 from 'uuid/v4';
 
 import { stringify } from 'querystringify';
-import { QUERY } from '../constants';
+
 
 
 export const IS_REQUESTING_AUDITS = 'IS_REQUESTING_AUDITS';
@@ -21,12 +21,7 @@ export const REQUEST_AUDITS_ERROR = 'REQUEST_AUDITS_ERROR';
  */
 export const requestAudits = (params = {}, limit = 20, offset = 0) => (dispatch) => {
 	
-	dispatch(isRequestingAudits());
-	if(params.year){
-		return get('/sql?q='+QUERY.replace("YEAR", params.year ))
-		.then((audits) => dispatch(requestAuditsSuccess(audits)))
-		.catch((error) => dispatch(requestAuditsError(error)));
-	}
+	
 	
 };
 
