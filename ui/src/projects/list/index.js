@@ -18,6 +18,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SaveIcon from '@material-ui/icons/Save';
 import FolderIcon from '@material-ui/icons/Note';
+import '../list/style.css';
+import DialogMetaData from '../metadata';
 
 
 import FilterListIcon from '@material-ui/icons/FilterList';
@@ -155,20 +157,6 @@ let EnhancedTableToolbar = props => {
   );
 };
 
-let MetaDataFolders = props => {
-  
-  const { folders} = props;
-
-  return (
-    folders.forEach((folder,key) => {
-      <div>
-        <IconButton aria-label="MedaData">
-          <FolderIcon />folder
-        </IconButton>
-      </div>
-    }) 
-  );
-};
 
 EnhancedTableToolbar.propTypes = {
   classes: PropTypes.object.isRequired,
@@ -202,7 +190,6 @@ class EnhancedTable extends React.Component {
       projects.push(createData(value.dataCustodian, value.projectName, value.ingestionFolders));
     }) : [],
 
-    console.log(projects);
     this.state = {
       order: 'asc',
       orderBy: 'name',
@@ -214,12 +201,12 @@ class EnhancedTable extends React.Component {
     this.handleRequestSort = this.handleRequestSort.bind(this);
     this.handleSelectAllClick = this.handleSelectAllClick.bind(this);
     this.handleClick = this.handleClick.bind(this);
-    this.handleDetail = this.handleDetail.bind(this);
     this.handleChangePage = this.handleChangePage.bind(this);
     this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
     this.isSelected = this.isSelected.bind(this);
-
   }
+
+ 
 
   handleRequestSort(event, property) {
     const orderBy = property;
@@ -247,7 +234,7 @@ class EnhancedTable extends React.Component {
     this.setState({ selected: [] });
   }
 
-  handleDetail (project) {
+  displayMetaData (project) {
     console.log('i am here');
     console.log(project);
   }
@@ -308,7 +295,6 @@ class EnhancedTable extends React.Component {
                 return (
                   <TableRow
                     hover
-                    onClick={ event => this.handleDetail(n)}
                     tabIndex={-1}
                     key={n.id}>
 
@@ -319,13 +305,13 @@ class EnhancedTable extends React.Component {
                       {n.name}
                     </TableCell>
                     <TableCell>{n.projectName}</TableCell>
-                    <TableCell>{ (n.folders && n.folders.length > 0) ? n.folders : ''}</TableCell>
+                    <TableCell component="th" scope="row">{ (n.folders && n.folders.length > 0) ? <DialogMetaData folders={n.folders} /> : ''}</TableCell>
                   </TableRow>
                 );
               })}
               {emptyRows > 0 && (
                 <TableRow style={{ height: 49 * emptyRows }}>
-                  <TableCell colSpan={6} />
+                  <TableCell colSpan={4} />
                 </TableRow>
               )}
             </TableBody>

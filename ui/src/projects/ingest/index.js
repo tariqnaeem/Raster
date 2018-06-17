@@ -41,14 +41,14 @@ class InputAdornments extends React.Component {
       
       var project = projects[i].split("/");
       
-      unIngestedProjects.push(<div>
+      unIngestedProjects.push(<div key={"UnIngestedProject"+i}>
         <TextField
           id={"Root"+i}
           name={"Root" + i}
           label="Folder Name"
           value={this.state["Root" + i] = project[0]}
           margin="normal"
-          key={"Root"+i}
+          key={"RootFolder"+i}
           disabled={true}
         />
         <TextField
@@ -69,7 +69,7 @@ class InputAdornments extends React.Component {
           key={"Project"+i}
           onChange = {(event) => this.setState({ ["Project" + i]: event.target.value })}
         />
-        <Button variant="contained" color="primary" key={"Bttn"+i} onClick={event => this.ingest(event, i)}>
+        <Button id={"Bttn"+i} variant="contained" color="primary" key={"Bttn"+i} onClick={event => this.ingest(event, i)}>
           Ingest
           <Icon>send</Icon>
         </Button>
