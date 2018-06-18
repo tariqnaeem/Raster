@@ -9,6 +9,7 @@ export const IS_REQUESTING_PROJECTS = 'IS_REQUESTING_PROJECTS';
 
 
 
+
 /**
  * Request Unpublished Projects from API.
  * 
@@ -26,6 +27,26 @@ export const requestUnPublishProjects = (custodian, showAll) => (dispatch) => {
 			.catch((error) => dispatch(requestProjectsError(error)));
 	
 	
+};
+
+
+/**
+ * Request PUBLISH Project from API.
+ * 
+ * @param {String} projectName
+ * @param {String} emailReport
+ * @param {Bool} returnReport
+ * @param {Bool} publish
+ * @return {Promise}
+ */
+
+export const requestPublishProject = ( projectName, emailReport, returnReport, publish) => (dispatch) => {
+
+	dispatch(isRequestingProjects());
+	
+	return post('RDL-Publish-ValidateProject', { "project": projectName, "emailReport": emailReport, "returnReport" : returnReport, "publish" : publish })
+			.then((projects) => dispatch(requestProjectsSuccess(projects)))
+			.catch((error) => dispatch(requestProjectsError(error)));
 };
 
 
@@ -77,7 +98,10 @@ export const requestUnIngestedProjects = (custodian, showAll) => (dispatch) => {
  */
 export const isRequestingProjects = () => ({
 	type: IS_REQUESTING_PROJECTS,
+	IsReady: false
 });
+
+
 
 
 
@@ -90,7 +114,8 @@ export const isRequestingProjects = () => ({
 export const requestProjectsSuccess = (projects) => ({
 	
 	type: REQUEST_PROJECTS,
-	projects: projects
+	projects: projects,
+	IsReady: true
 	
 });
 

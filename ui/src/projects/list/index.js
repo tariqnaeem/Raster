@@ -20,6 +20,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import FolderIcon from '@material-ui/icons/Note';
 import '../list/style.css';
 import DialogMetaData from '../metadata';
+import {ADMIN_EMAIL} from '../../constants'
 
 
 import FilterListIcon from '@material-ui/icons/FilterList';
@@ -124,7 +125,7 @@ const toolbarStyles = theme => ({
 
 let EnhancedTableToolbar = props => {
   
-  const { numSelected, classes, view} = props;
+  const { numSelected, classes, view, handlePublish} = props;
 
   return (
     <Toolbar
@@ -147,7 +148,7 @@ let EnhancedTableToolbar = props => {
       <div className={classes.actions}>
         {numSelected > 0 && view == "UNPUBLISH" ? (
           <Tooltip title="Publish">
-            <IconButton aria-label="Publish">
+            <IconButton aria-label="Publish" onClick={handlePublish}>
               <SaveIcon />
             </IconButton>
           </Tooltip>
@@ -183,8 +184,9 @@ class EnhancedTable extends React.Component {
     super(props);
     
     const {data} = this.props;
-    var projects =  [];
     
+    var projects =  [];
+    console.log(this.props);
     data && data.length > 0 ? data.forEach(function(value, index) {
       
       projects.push(createData(value.dataCustodian, value.projectName, value.ingestionFolders));
@@ -204,6 +206,7 @@ class EnhancedTable extends React.Component {
     this.handleChangePage = this.handleChangePage.bind(this);
     this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
     this.isSelected = this.isSelected.bind(this);
+    this.handlePublish = this.handlePublish.bind(this);
   }
 
  
@@ -233,10 +236,24 @@ class EnhancedTable extends React.Component {
     }
     this.setState({ selected: [] });
   }
-
-  displayMetaData (project) {
-    console.log('i am here');
-    console.log(project);
+  /**
+   * Publishing the projects
+   */
+  handlePublish(){
+    
+    var arrEmails = [ADMIN_EMAIL];
+    var arrProjects = [];
+    var indexSelected = 0;
+    for(let i = 0; i < this.state.data.length; i++){  
+      /**
+       * Create payload for multiple projects
+       */
+      if(this.state.data[i].id == this.state.selected[indexSelected]){
+        arrProjects.push(this.state.data[i].projectName);
+        indexSelected++;
+      }
+    }
+      this.props.requests.requestPublishProject(arrProjects[0], arrEmails, true, true);
   }
 
   handleClick (event, id) {
@@ -256,6 +273,7 @@ class EnhancedTable extends React.Component {
         selected.slice(selectedIndex + 1)
       );
     }
+ 
     this.setState({ selected: newSelected });
   }
 
@@ -278,7 +296,7 @@ class EnhancedTable extends React.Component {
 
     return (
       <Paper className={classes.root}>
-        <EnhancedTableToolbar numSelected={selected.length} view={view} />
+        <EnhancedTableToolbar numSelected={selected.length} view={view} handlePublish={this.handlePublish} />
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-labelledby="tableTitle">
             <EnhancedTableHead

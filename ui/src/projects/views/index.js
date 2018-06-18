@@ -1,7 +1,7 @@
 import React from 'react';
 import Ingest from '../ingest';
 import List from '../list';
-
+import Message from '../message';
 import {ADMIN} from '../../constants';
 
 
@@ -43,12 +43,15 @@ class Views extends React.Component {
       this.setState({view: this.props.view});
       this.RequestProjects(this.props.view);
     }
-    console.log(this.props);
-    const { projects, uningestedFolders}  = this.props.requests;
     
+    const { projects, uningestedFolders}  = this.props.requests;
+    console.log(this.props);
     return (
       <div>
-        {this.props.view == "INGEST" ? <Ingest data={uningestedFolders} request={this.props.requests} /> : <List data={projects}  view={this.props.view}/>}  
+        {this.props.view == "INGEST" ? 
+            <Ingest data={uningestedFolders} requests={this.props.requests} /> : 
+            <List data={projects}  view={this.props.view}  requests={this.props.requests} />}
+            <Message response={this.props}/>  
       </div>
     );
   }

@@ -11,7 +11,7 @@ import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
 import Progress from '../progress';
 import React, { Component } from 'react';
-import {ADMIN,BUCKET} from '../../constants';
+import {ADMIN, BUCKET} from '../../constants';
 
 
 
@@ -31,7 +31,7 @@ class InputAdornments extends React.Component {
       dataCustodian 
       folder */
   
-      this.props.request.requestIngestProject(BUCKET, this.state["Project" + index], ADMIN, this.state["Root" + index]);
+      this.props.requests.requestIngestProject(BUCKET, this.state["Project" + index], ADMIN, this.state["Root" + index]);
   }
   create(){
     let unIngestedProjects = []
@@ -79,7 +79,7 @@ class InputAdornments extends React.Component {
   }
   
   render() {
-    console.log(this.props.request);
+    
     const { data } = this.props;
   
     return (
