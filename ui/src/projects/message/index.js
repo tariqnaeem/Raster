@@ -19,7 +19,7 @@ import * as actions from '../actions';
 import { connect} from 'react-redux';
 import { getState } from '../reducer';
 
-const emails = ['username@gmail.com', 'user02@gmail.com'];
+
 const styles = {
   avatar: {
     backgroundColor: blue[100],
@@ -35,19 +35,20 @@ class SimpleDialog extends React.Component {
     }
   
     handleClose (){
+        
         this.props.onClose();
     }
 
   
   render() {
-    const { classes, onClose,  ...other } = this.props;
+    const { classes, onClose, response,  ...other } = this.props;
    
     return (
       <Dialog onClose={this.handleClose} aria-labelledby="simple-dialog-title" {...other}>
-        <DialogTitle id="simple-dialog-title">Set backup account</DialogTitle>
+        <DialogTitle id="simple-dialog-title">Response</DialogTitle>
         <div>
           <List>
-            {emails.map((email, index) => (
+            {response.emailedTo.map((email, index) => (
               <ListItem key={email}>
                 <ListItemAvatar>
                   <Avatar className={classes.avatar}>
@@ -75,7 +76,8 @@ class SimpleDialogDemo extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-        open: true
+        openResponse: false,
+        response: null
       };
 
     this.handleClickOpen = this.handleClickOpen.bind(this);
@@ -84,22 +86,27 @@ class SimpleDialogDemo extends React.Component {
     
 
   handleClickOpen () {
-    this.state.open = true;
+    this.setState({openResponse : true, response:this.props});
   }
 
   handleClose () {
-    this.state.open = false ;
+    this.setState({openResponse : false});
   }
 
   render() {
-    console.log(this.props);
+    
+    if(this.state.response != this.props){
+        
+        this.handleClickOpen();
+    }
     
     return (
-      <div> {this.props.emailedTo ? 
+      <div>  
         <SimpleDialogWrapped
-          open={this.state.open}
+          open={this.state.openResponse}
           onClose={this.handleClose}
-        /> :''}
+          response={this.props}
+        />
       </div>
     );
   }

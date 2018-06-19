@@ -1,9 +1,11 @@
 import React from 'react';
 import Ingest from '../ingest';
 import List from '../list';
-import Message from '../message';
+import Response from '../response';
 import {ADMIN} from '../../constants';
-
+import * as actions from '../actions';
+import { connect} from 'react-redux';
+import { getState } from '../reducer';
 
 
 class Views extends React.Component {
@@ -45,17 +47,18 @@ class Views extends React.Component {
     }
     
     const { projects, uningestedFolders}  = this.props.requests;
-    console.log(this.props);
+    
     return (
       <div>
         {this.props.view == "INGEST" ? 
             <Ingest data={uningestedFolders} requests={this.props.requests} /> : 
             <List data={projects}  view={this.props.view}  requests={this.props.requests} />}
-            <Message response={this.props}/>  
+            {this.props.emailedTo ? 
+            <Response response={this.props}/> :''}  
       </div>
     );
   }
 }
 
 
-export default Views;
+export default connect(getState, actions)(Views);
