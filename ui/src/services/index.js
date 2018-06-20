@@ -1,4 +1,4 @@
-const API_PATH = process.env.REACT_APP_API_PATH || '';
+var API_PATH = process.env.REACT_APP_API_PATH || '';
 
 export const get = (endpoint) => (
   fetch(API_PATH + endpoint, { method: 'GET', credentials: 'same-origin' })
@@ -13,8 +13,10 @@ export const get = (endpoint) => (
   }).then(({ json }) => json)
 );
 
-export const post = (endpoint, payload) => (
-  fetch(API_PATH + endpoint, { 
+export const post = (endpoint, payload, type) => (
+   
+  
+  fetch(endpoint, { 
         method: 'POST',
         body: JSON.stringify(payload) })
     .then(response => {

@@ -9,11 +9,13 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
-import Progress from '../progress';
+
 import React, { Component } from 'react';
 import {ADMIN, BUCKET} from '../../constants';
 
-
+import * as actions from '../actions';
+import { connect} from 'react-redux';
+import { getState } from '../reducer';
 
 
 
@@ -35,7 +37,7 @@ class InputAdornments extends React.Component {
   }
   create(){
     let unIngestedProjects = []
-    var projects = this.props.data;
+    var projects = this.props.projects.uningestedFolders;
     
     for (let i = 0; i < projects.length; i++) {
       
@@ -80,11 +82,12 @@ class InputAdornments extends React.Component {
   
   render() {
     
-    const { data } = this.props;
+    const { projects, isReady } = this.props;
+    
   
     return (
       <div className="top-space">
-      { (data && data.length > 0) ? this.create() : <Progress/>}
+      { (isReady) ? this.create() : <Processing/>}
       </div>      
     );
   }
@@ -92,4 +95,4 @@ class InputAdornments extends React.Component {
 
 
 
-export default InputAdornments;
+export default connect(getState, actions)(InputAdornments);

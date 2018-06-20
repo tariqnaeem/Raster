@@ -18,25 +18,33 @@ import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SaveIcon from '@material-ui/icons/Save';
 import FolderIcon from '@material-ui/icons/Note';
+import TextField from '@material-ui/core/TextField';
 import '../list/style.css';
 import DialogMetaData from '../metadata';
-import {ADMIN_EMAIL} from '../../constants'
+import {ADMIN_EMAIL, ADMIN, BUCKET} from '../../constants';
+import Processing from '../processing';
+import * as actions from '../actions';
+import { connect} from 'react-redux';
+import { compose } from 'redux'
+import { getState } from '../reducer';
+import Error from '../dialogs/validation';
+
 
 
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 
 let counter = 0;
-function createData(name, projectName, folders) {
+function createData(folderName, custodian, projectName) {
   counter += 1;
   
-  return { id: counter, name, projectName, folders: folders };
+  return { id: counter, folderName, custodian, projectName };
 }
 
 const columnData = [
-  { id: 'name', numeric: false, disablePadding: true, label: 'Custodian' },
-  { id: 'projectName', numeric: false, disablePadding: false, label: 'Project Name' },
-  { id: 'folders', numeric: false, disablePadding: false, label: 'Folders' }
+  { id: 'name', numeric: false, disablePadding: true, label: 'Folder Name' },
+  { id: 'custodian', numeric: false, disablePadding: false, label: 'Data Custodian' },
+  { id: 'project', numeric: false, disablePadding: false, label: 'Project Name' }
 ];
 
 class EnhancedTableHead extends React.Component {
@@ -45,7 +53,7 @@ class EnhancedTableHead extends React.Component {
 
   render() {
     const { onSelectAllClick, order, orderBy, numSelected, rowCount, view, data} = this.props;
-    
+   
     return (
       <TableHead>
         <TableRow>
@@ -142,15 +150,14 @@ let EnhancedTableToolbar = props => {
         )}
       </div>
       <div className={classes.spacer} />
+      {numSelected > 0 ? (
       <div className={classes.actions}>
-        {numSelected > 0 && view == "UNPUBLISH" ? (
-          <Tooltip title="Publish">
+          <Tooltip title="Ingest">
             <IconButton aria-label="Publish" onClick={handlePublish}>
               <SaveIcon />
             </IconButton>
           </Tooltip>
-        ) : ''}
-      </div>
+      </div>) :''}
     </Toolbar>
   );
 };
@@ -179,16 +186,13 @@ const styles = theme => ({
 class EnhancedTable extends React.Component {
   constructor(props) {
     super(props);
-    
     const {data} = this.props;
-    
-    var projects =  [];
-    
+    var projects = [];
     data && data.length > 0 ? data.forEach(function(value, index) {
       
-      projects.push(createData(value.dataCustodian, value.projectName, value.ingestionFolders));
-    }) : [],
-
+        projects.push(createData(value, ADMIN, ''));
+      }) : [],
+  
     this.state = {
       order: 'asc',
       orderBy: 'name',
@@ -245,16 +249,33 @@ class EnhancedTable extends React.Component {
       /**
        * Create payload for multiple projects
        */
-      if(this.state.data[i].id == this.state.selected[indexSelected]){
-        arrProjects.push(this.state.data[i].projectName);
-        indexSelected++;
+      
+      
+      
+       if(this.state.data[i].id == this.state.selected[indexSelected]){
+        
+        if(this.state["Project"+this.state.data[i].id] == undefined || this.state["Project"+this.state.data[i].id].trim() == ''){
+            alert('Project Name is mandatory');
+            return;
+        } else {
+            arrProjects.push(this.state["Project" + this.state.data[i].id]);
+            this.props.requests.requestIngestProject(BUCKET, this.state["Project"+this.state.data[i].id], ADMIN, this.state.data[i].folderName);
+            console.log(BUCKET + ' '+ this.state["Project"+this.state.data[i].id] + ' '+ADMIN+' ' + this.state.data[i].folderName);
+            indexSelected++;
+        }
+        
       }
     }
-      this.props.requests.requestPublishProject(arrProjects[0], arrEmails, true, true);
+    
+    
   }
 
   handleClick (event, id) {
+    let indexSelected = 0;
     const { selected } = this.state;
+    
+    
+    
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
 
@@ -270,7 +291,6 @@ class EnhancedTable extends React.Component {
         selected.slice(selectedIndex + 1)
       );
     }
- 
     this.setState({ selected: newSelected });
   }
 
@@ -287,10 +307,11 @@ class EnhancedTable extends React.Component {
   isSelected(id){this.state.selected.indexOf(id) !== -1}
 
   render() {
-    const { classes, view } = this.props;
-    const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
+    
+    const { classes, view, data, isReady } = this.props;
+    const {order, orderBy, selected, rowsPerPage, page } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
-
+    
     return (
       <Paper className={classes.root}>
         <EnhancedTableToolbar numSelected={selected.length} view={view} handlePublish={this.handlePublish} />
@@ -305,21 +326,28 @@ class EnhancedTable extends React.Component {
               rowCount={data.length}
             />
             <TableBody>
-              {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(n => {
-                const isSelected = this.isSelected(n.id);
+              {
+                
+                this.state.data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(project => {
+                const isSelected = this.isSelected(project.id);
+                
                 return (
-                  <TableRow
-                    hover
-                    tabIndex={-1}
-                    key={n.id}>
-                    <TableCell padding="checkbox">
-                      <Checkbox checked={isSelected} onClick={event => this.handleClick(event, n.id)}/>
-                    </TableCell>
-                    <TableCell component="th" scope="row" padding="none">
-                      {n.name}
-                    </TableCell>
-                    <TableCell>{n.projectName}</TableCell>
-                    <TableCell component="th" scope="row">{ (n.folders && n.folders.length > 0) ? <DialogMetaData folders={n.folders} /> : ''}</TableCell>
+                    <TableRow hover tabIndex={-1} key={project.id}>
+                        <TableCell padding="checkbox">
+                            <Checkbox checked={isSelected} onClick={event => this.handleClick(event, project.id)}/>
+                        </TableCell>
+                        <TableCell component="th" scope="row" padding="none">{project.folderName}</TableCell>
+                        <TableCell>{project.custodian}</TableCell>
+                        <TableCell>
+                            <TextField
+                                required
+                                id={"Project"+project.id}
+                                label="Project Name"
+                                value={this.state["Project" + project.id]}
+                                margin="normal"
+                                key={"Project"+project.id}
+                                onChange = {(event) => this.setState({ ["Project" + project.id]: event.target.value })}/>
+                        </TableCell>
                   </TableRow>
                 );
               })}
@@ -354,4 +382,4 @@ EnhancedTable.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(EnhancedTable);
+export default compose(withStyles(styles), connect(getState, actions))(EnhancedTable);

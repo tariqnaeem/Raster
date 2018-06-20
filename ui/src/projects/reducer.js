@@ -13,7 +13,7 @@ const initialState = {};
  * @param {Object} state
  * @return {Object}
  */
-export const getState = ({ projects = {} }) => projects;
+export const getState = ({ projects = {} }) => reducer;
 
 const reducer = (state = initialState, action) => {
 	let updated = initialState;
@@ -34,6 +34,7 @@ const reducer = (state = initialState, action) => {
 			updated = initialState;
 			break;
 	}
+	
 
 	return {
 		...state,
