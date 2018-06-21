@@ -1,4 +1,4 @@
-import { get, post } from '../services';
+import { get, post, postIngest } from '../services';
 import uuidv4 from 'uuid/v4';
 
 export const REQUEST_PROJECTS = 'REQUEST_PROJECTS';
@@ -22,7 +22,7 @@ export const requestUnPublishProjects = (custodian, showAll) => (dispatch) => {
 
 	dispatch(isRequestingProjects());
 	
-	return post('https://ub6j66j7yh.execute-api.ap-southeast-2.amazonaws.com/test/RDL-Publish-ListProjects',{ "dataCustodian": custodian, "showAll": showAll, "showUningested": true }, "PUBLISH")
+	return post('RDL-Publish-ListProjects',{ "dataCustodian": custodian, "showAll": showAll, "showUningested": true })
 			.then((projects) => dispatch(requestProjectsSuccess(projects)))
 			.catch((error) => dispatch(requestProjectsError(error)));
 	
@@ -44,7 +44,7 @@ export const requestPublishProject = ( projectName, emailReport, returnReport, p
 
 	dispatch(isRequestingProjects());
 	
-	return post('RDL-Publish-ValidateProject', { "project": projectName, "emailReport": emailReport, "returnReport" : returnReport, "publish" : publish }, "PUBLISH")
+	return post('RDL-Publish-ValidateProject', { "project": projectName, "emailReport": emailReport, "returnReport" : returnReport, "publish" : publish })
 			.then((projects) => dispatch(requestProjectsSuccess(projects)))
 			.catch((error) => dispatch(requestProjectsError(error)));
 };
@@ -63,7 +63,7 @@ export const requestIngestProject = (bucketName, projectName, dataCustodian, fol
 
 	dispatch(isRequestingProjects());
 	
-	return post('RDL-Ingest-Project', { "bucketName": bucketName, "projectName": projectName, "dataCustodian": dataCustodian, "folder" : folder }, "INGEST")
+	return postIngest('RDL-Ingest-Project', { "bucketName": bucketName, "projectName": projectName, "dataCustodian": dataCustodian, "folder" : folder })
 			.then((projects) => dispatch(requestProjectsSuccess(projects)))
 			.catch((error) => dispatch(requestProjectsError(error)));
 };
@@ -81,7 +81,7 @@ export const requestUnIngestedProjects = (custodian, showAll) => (dispatch) => {
 
 	dispatch(isRequestingProjects());
 	
-	return post('RDL-Publish-ListProjects',{ "dataCustodian": custodian, "showAll": showAll, "showUningested": true }, "PUBLISH")
+	return post('RDL-Publish-ListProjects',{ "dataCustodian": custodian, "showAll": showAll, "showUningested": true })
 			.then((projects) => dispatch(requestProjectsSuccess(projects)))
 			.catch((error) => dispatch(requestProjectsError(error)));
 	

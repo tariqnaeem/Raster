@@ -188,6 +188,7 @@ class EnhancedTable extends React.Component {
     super(props);
     const {data} = this.props;
     var projects = [];
+
     data && data.length > 0 ? data.forEach(function(value, index) {
       
         projects.push(createData(value, ADMIN, ''));
@@ -245,26 +246,52 @@ class EnhancedTable extends React.Component {
     var arrEmails = [ADMIN_EMAIL];
     var arrProjects = [];
     var indexSelected = 0;
+    var validation = true;
+
     for(let i = 0; i < this.state.data.length; i++){  
-      /**
-       * Create payload for multiple projects
-       */
-      
-      
-      
-       if(this.state.data[i].id == this.state.selected[indexSelected]){
+        /**
+         * Validating Project Names
+         */
         
-        if(this.state["Project"+this.state.data[i].id] == undefined || this.state["Project"+this.state.data[i].id].trim() == ''){
-            alert('Project Name is mandatory');
-            return;
-        } else {
-            arrProjects.push(this.state["Project" + this.state.data[i].id]);
-            this.props.requests.requestIngestProject(BUCKET, this.state["Project"+this.state.data[i].id], ADMIN, this.state.data[i].folderName);
-            console.log(BUCKET + ' '+ this.state["Project"+this.state.data[i].id] + ' '+ADMIN+' ' + this.state.data[i].folderName);
+         if(this.state.data[i].id == this.state.selected[indexSelected]){
+          
+          if(indexSelected == this.state.selected.length){
+              break;
+          }
+          else if(this.state["Project"+this.state.data[i].id] == undefined || this.state["Project"+this.state.data[i].id].trim() == ''){
+           
+              validation = false;
+              indexSelected++;
+              
+          } else {
             indexSelected++;
+          }
+          
         }
-        
       }
+
+      indexSelected = 0;
+      if(validation){
+        for(let i = 0; i < this.state.data.length; i++){  
+            
+             if(this.state.data[i].id == this.state.selected[indexSelected]){
+              
+              if(indexSelected == this.state.selected.length){
+                  break;
+              }
+              else {
+                  arrProjects.push(this.state["Project" + this.state.data[i].id]);
+                  this.props.requests.requestIngestProject(BUCKET, this.state["Project"+this.state.data[i].id], ADMIN, 'Ingestion/'+ ADMIN + '/' + this.state.data[i].folderName);
+                  indexSelected++;
+              }
+              
+            }
+        }
+      
+        //this.props.requests.requestUnIngestedProjects(ADMIN,true); 
+      }
+    else {
+        alert('Project Name is mandatory');
     }
     
     
@@ -310,10 +337,11 @@ class EnhancedTable extends React.Component {
     
     const { classes, view, data, isReady } = this.props;
     const {order, orderBy, selected, rowsPerPage, page } = this.state;
-    const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
+    const emptyRows = this.state.data ? rowsPerPage - Math.min(rowsPerPage, this.state.data.length - page * rowsPerPage) : 0;
     
     return (
       <Paper className={classes.root}>
+       
         <EnhancedTableToolbar numSelected={selected.length} view={view} handlePublish={this.handlePublish} />
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-labelledby="tableTitle">
@@ -323,7 +351,7 @@ class EnhancedTable extends React.Component {
               orderBy={orderBy}
               onSelectAllClick={this.handleSelectAllClick}
               onRequestSort={this.handleRequestSort}
-              rowCount={data.length}
+              rowCount={this.state.data.length}
             />
             <TableBody>
               {
@@ -361,7 +389,7 @@ class EnhancedTable extends React.Component {
         </div>
         <TablePagination
           component="div"
-          count={data.length}
+          count={this.state.data.length}
           rowsPerPage={rowsPerPage}
           page={page}
           backIconButtonProps={{

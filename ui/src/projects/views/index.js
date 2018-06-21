@@ -7,6 +7,7 @@ import * as actions from '../actions';
 import { connect} from 'react-redux';
 import { getState } from '../reducer';
 import Processing from '../processing';
+import Message from '../dialogs/validation';
 
 class Views extends React.Component {
   
@@ -14,6 +15,7 @@ class Views extends React.Component {
     super();
     this.state = {
       view: "INGEST",
+      projects:[]
     };
     
     this.DisplayView = this.RequestProjects.bind(this);
@@ -22,6 +24,9 @@ class Views extends React.Component {
   
   componentDidMount(){
         this.props.requests.requestUnIngestedProjects(ADMIN,true);
+  }
+  componentWillMount(){
+    this.RequestProjects(this.props.view);
   }
 
   RequestProjects(view){
@@ -41,16 +46,28 @@ class Views extends React.Component {
 
   render() {
     
-    if(this.props.view != this.state.view){
-      this.setState({view: this.props.view});
+    const { projects, isReady}  = this.props.requests;
+    
+    console.log(this.props);
+
+  
+
+    if(this.props.view != this.state.view ){
+      this.setState({view: this.props.view, projects: this.props.projects});
       this.RequestProjects(this.props.view);
     }
+    /*if(this.props.projects && this.props.projects.ingestionStarted){
+      console.log(this.state.projects);
+      this.RequestProjects(this.props.view);
+    }*/
     
-    const { projects, isReady}  = this.props.requests;
+    
     
     return (
       <div>
-        {this.props.view == "INGEST" ? 
+        { isReady  &&  this.props.projects && this.props.projects.bucketName ? <Message message={this.props.projects} /> : ''}
+        {
+          this.props.view == "INGEST" ?  
             !(isReady) ? <Processing /> : <Ingest data={this.props.projects.uningestedFolders} requests={this.props.requests} /> : 
             <List data={projects.projects}  view={this.props.view}  requests={this.props.requests} />}
             {this.props.emailedTo ? 

@@ -13,7 +13,13 @@ import * as actions from '../actions';
 import { connect} from 'react-redux';
 import { getState } from '../reducer';
 import CircularProgress from "@material-ui/core/CircularProgress";
+import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+import FolderIcon from '@material-ui/icons/Note';
+import FailedIcon from '@material-ui/icons/Cancel';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import Divider from '@material-ui/core/Divider';
 import purple from "@material-ui/core/colors/purple";
+
 
 
 const styles = theme => ({
@@ -42,7 +48,16 @@ class SimpleDialog extends React.Component {
         <div>
           <List>
               <ListItem>
-              <i className="material-icons">error</i><ListItemText primary={message} />
+                <ListItemIcon>
+                  <FolderIcon />
+                </ListItemIcon>
+                <ListItemText primary={message.bucketName} />
+              </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                {message.ingestionStarted ? <ThumbUpIcon /> : <FailedIcon />}
+                </ListItemIcon>
+                <ListItemText primary="Ingestion Status" />
               </ListItem>
           </List>
         </div>
@@ -72,7 +87,7 @@ class SimpleDialogDemo extends React.Component {
     
 
   handleClickOpen () {
-    this.setState({openResponse : true, response:this.props});
+    this.setState({openResponse : true, response:this.props.message});
   }
 
   handleClose () {
@@ -81,18 +96,19 @@ class SimpleDialogDemo extends React.Component {
 
   render() {
     
-    if(this.state.response != this.props){
-        
-        this.handleClickOpen();
+    if(this.state.response != this.props.message){
+        if(this.props.message.bucketName){
+          this.handleClickOpen();
+        }
     }
     
     return (
       <div>  
-        <SimpleDialogWrapped
+     {this.state.response ? <SimpleDialogWrapped
           open={this.state.openResponse}
           onClose={this.handleClose}
-          message={this.props.message}
-        />
+          message={this.state.response}
+        /> : ''}
       </div>
     );
   }
