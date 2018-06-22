@@ -319,7 +319,7 @@ class EnhancedTable extends React.Component {
                       {n.name}
                     </TableCell>
                     <TableCell>{n.projectName}</TableCell>
-                    <TableCell component="th" scope="row">{ (n.folders && n.folders.length > 0) ? <DialogMetaData folders={n.folders} /> : ''}</TableCell>
+                    <TableCell component="th" scope="row">{ (n.folders && n.folders.length > 0) ? <DialogMetaData  projectName={n.projectName} folders={n.folders} /> : ''}</TableCell>
                   </TableRow>
                 );
               })}

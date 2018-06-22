@@ -14,20 +14,16 @@ class Views extends React.Component {
   constructor() {
     super();
     this.state = {
-      view: "INGEST",
+      view: "",
       projects:[]
     };
     
     this.DisplayView = this.RequestProjects.bind(this);
   }
   
-  
-  componentDidMount(){
-        this.props.requests.requestUnIngestedProjects(ADMIN,true);
-  }
-  componentWillMount(){
+  /*componentWillMount(){
     this.RequestProjects(this.props.view);
-  }
+  }*/
 
   RequestProjects(view){
      
@@ -48,30 +44,29 @@ class Views extends React.Component {
     
     const { projects, isReady}  = this.props.requests;
     
-    console.log(this.props);
-
-  
-
     if(this.props.view != this.state.view ){
+      this.RequestProjects(this.props.view);
       this.setState({view: this.props.view, projects: this.props.projects});
-      this.RequestProjects(this.props.view);
     }
-    /*if(this.props.projects && this.props.projects.ingestionStarted){
-      console.log(this.state.projects);
-      this.RequestProjects(this.props.view);
-    }*/
+
+    if(this.props.projects && this.props.projects != this.state.projects && !(this.props.projects.bucketName)){
+      
+      this.setState({projects : this.props.projects});
+      
+      
+    }
     
     
-    
+    console.log(this.props.projects);
     return (
       <div>
-        { isReady  &&  this.props.projects && this.props.projects.bucketName ? <Message message={this.props.projects} /> : ''}
+        { isReady  &&  this.props.projects?  <Message message={this.props.projects} /> : ''}
         {
           this.props.view == "INGEST" ?  
-            !(isReady) ? <Processing /> : <Ingest data={this.props.projects.uningestedFolders} requests={this.props.requests} /> : 
-            <List data={projects.projects}  view={this.props.view}  requests={this.props.requests} />}
-            {this.props.emailedTo ? 
-            <Response response={this.props}/> :''}  
+            !(isReady) ? <Processing /> : !(this.props.projects.uningestedFolders) ? this.RequestProjects(this.props.view) : <Ingest data={this.props.projects.uningestedFolders} requests={this.props.requests} /> : 
+            !(isReady) ? <Processing /> :<List data={this.props.projects.projects}  view={this.props.view}  requests={this.props.requests} />}
+            {this.props.projects && this.props.projects.emailedTo ? 
+            <Response response={this.props.projects}/> :''}  
       </div>
     );
   }

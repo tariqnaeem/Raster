@@ -1,7 +1,5 @@
 const API_PATH = process.env.REACT_APP_API_PATH || '';
 
-const API_INGEST_PATH = process.env.API_INGEST_PATH || '';
-
 
 export const post = (endpoint, payload) => (
   fetch(API_PATH.replace('BASE-URL', 'ub6j66j7yh') + endpoint, { 

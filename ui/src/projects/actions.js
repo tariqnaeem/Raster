@@ -72,9 +72,8 @@ export const requestIngestProject = (bucketName, projectName, dataCustodian, fol
 /**
  * Request Unpublished Projects from API.
  * 
- * @param {Object} params
- * @param {Integer} limit
- * @param {Integer} offset
+ * @param {Custodian} 
+ * @param {Show All} 
  * @return {Promise}
  */
 export const requestUnIngestedProjects = (custodian, showAll) => (dispatch) => {
@@ -84,9 +83,28 @@ export const requestUnIngestedProjects = (custodian, showAll) => (dispatch) => {
 	return post('RDL-Publish-ListProjects',{ "dataCustodian": custodian, "showAll": showAll, "showUningested": true })
 			.then((projects) => dispatch(requestProjectsSuccess(projects)))
 			.catch((error) => dispatch(requestProjectsError(error)));
+};
+
+
+/**
+ * Request Project MetaData from API.
+ * 
+ * @param {Object} params
+ * @param {Integer} limit
+ * @param {Integer} offset
+ * @return {Promise}
+ */
+export const requestProjectMetaData = (project, objectPath) => (dispatch) => {
+
+	dispatch(isRequestingProjects());
+	
+	return post('RDL-Publish-ListMetadata',{ "project": project, "objectPath": objectPath })
+			.then((projects) => dispatch(requestProjectsSuccess(projects)))
+			.catch((error) => dispatch(requestProjectsError(error)));
 	
 	
 };
+
 
 
 

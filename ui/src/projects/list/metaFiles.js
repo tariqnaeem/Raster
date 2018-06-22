@@ -20,6 +20,10 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Divider from '@material-ui/core/Divider';
 import purple from "@material-ui/core/colors/purple";
 
+import Expand from "@material-ui/icons/ExpandMore";
+import Collapse from "@material-ui/icons/ChevronRight";
+
+
 
 
 const styles = theme => ({
@@ -77,7 +81,7 @@ SimpleDialog.propTypes = {
   onClose: PropTypes.func
 };
 
-const SimpleDialogWrapped = withStyles(styles)(SimpleDialog);
+
 
 class SimpleDialogDemo extends React.Component {
   constructor(props){
@@ -110,11 +114,32 @@ class SimpleDialogDemo extends React.Component {
     
     return (
       <div>  
-     {this.props.message.bucketName  ? <SimpleDialogWrapped
-          open={this.state.openResponse}
-          onClose={this.handleClose}
-          message={this.props.message}
-        /> : ''}
+            <Dialog     aria-labelledby="simple-dialog-title"  
+                        onClose={this.handleClose} {...other}>
+                <DialogTitle id="simple-dialog-title"></DialogTitle>
+                    <div>
+                    <List>
+                        <ListItem>
+                            <ListItemIcon>
+                            <FolderIcon />
+                            </ListItemIcon>
+                            <ListItemText primary={message.bucketName} />
+                        </ListItem>
+                        <ListItem>
+                            <ListItemIcon>
+                            <FolderIcon />
+                            </ListItemIcon>
+                            <ListItemText primary={message.projectName} />
+                        </ListItem>
+                        <ListItem>
+                            <ListItemIcon>
+                            {message.ingestionStarted ? <ThumbUpIcon /> : <FailedIcon />}
+                            </ListItemIcon>
+                            <ListItemText primary="Ingestion Status" />
+                        </ListItem>
+                    </List>
+                    </div>
+      </Dialog>
       </div>
     );
   }

@@ -9,19 +9,24 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import FolderIcon from '@material-ui/icons/Note';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
+import { Divider } from '@material-ui/core';
 export default class FormDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       DialogOpen: false,
+      ANZACId: "",
+      DatasetName: "",
+      datasetOwnerId: "",
+      folderName: ""
     };
 
     this.handleClickOpen = this.handleClickOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.processFolders = this.processFolders.bind(this);
   }
-  handleClickOpen(){
-    this.setState({ DialogOpen: true });
+  handleClickOpen(event, folder){
+    this.setState({ DialogOpen: true, folderName:folder  });
   }
 
   handleClose(){
@@ -33,22 +38,18 @@ export default class FormDialog extends React.Component {
     for(let i =0; i< folders.length;i++){
         arrFolders.push(
           <div key={"UnIngestedFolder"+i}>
-          <Tooltip
-          enterDelay={500}
-          id={"tooltip-controlled"+i}
-          leaveDelay={100}
-          open={this.state.open}
-          placement="bottom"
-          title={folders[i]}
-          
-        >
-            <IconButton aria-label={folders[i]} onClick={this.handleClickOpen}>
-              <FolderIcon />
-            </IconButton>
-            
-        </Tooltip>
-          
-        </div>
+            <Tooltip
+                enterDelay={500}
+                id={"tooltip-controlled"+i}
+                leaveDelay={100}
+                open={this.state.open}
+                placement="bottom"
+                title={folders[i]}>
+              <IconButton aria-label={folders[i]} onClick={event => this.handleClickOpen(event, folders[i])}>
+                <FolderIcon />
+              </IconButton>
+            </Tooltip>
+          </div>
         )
     }
     return arrFolders;
@@ -57,27 +58,45 @@ export default class FormDialog extends React.Component {
   render() {
     
     const folders = this.props.folders;
-    
+    const projectName = this.props.projectName;
     return (
       <div>
         {this.processFolders(folders)}
         <Dialog
           open={this.state.DialogOpen}
           onClose={this.handleClose}
-          aria-labelledby="form-dialog-title"
-        >
-          <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+          aria-labelledby="form-dialog-title">
+          <DialogTitle id="form-dialog-title">{"Folder : "+this.state.folderName}</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              To subscribe to this website, please enter your email address here. We will send
-              updates occasionally.
+              {"Project: " + projectName}  
             </DialogContentText>
             <TextField
               autoFocus
               margin="dense"
-              id="name"
-              label="Email Address"
-              type="email"
+              id="ANZACId"
+              label="ANZLIC ID"
+              onChange = {(event) => this.setState({ "ANZACId": event.target.value })}
+              type="text"
+              fullWidth/>
+           
+            <TextField
+              autoFocus
+              margin="dense"
+              id="DatasetName"
+              label="Dataset Name"
+              onChange = {(event) => this.setState({ "DatasetName": event.target.value })}
+              type="text"
+              fullWidth
+            />
+           
+            <TextField
+              autoFocus
+              margin="dense"
+              id="datasetOwnerId"
+              label="Dataset Name"
+              onChange = {(event) => this.setState({ "datasetOwnerId": event.target.value })}
+              type="text"
               fullWidth
             />
           </DialogContent>
