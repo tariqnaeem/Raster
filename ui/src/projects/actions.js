@@ -5,6 +5,11 @@ export const REQUEST_PROJECTS = 'REQUEST_PROJECTS';
 export const PROJECTS_ERROR = 'PROJECTS_ERROR';
 export const IS_REQUESTING_PROJECTS = 'IS_REQUESTING_PROJECTS';
 
+export const IS_REQUESTING_EDIT_METADATA = 'IS_REQUESTING_EDIT_METADATA'; 
+export const REQUEST_EDIT_METADATA = 'REQUEST_EDIT_METADATA'; 
+export const METADATA_ERROR = 'METADATA_ERROR'; 
+
+
 
 
 
@@ -105,6 +110,47 @@ export const requestProjectMetaData = (project, objectPath) => (dispatch) => {
 	
 };
 
+/**
+ * Request Project Edit MetaData from API.
+ * 
+ * @param {Object} 
+ * @return {Promise}
+ */
+/**
+ * {
+"project": "Test-Publish",
+"objectPath": "rdsdatalakelambdatesting/Test-Publish/data",
+"updates": [
+{
+"name": "ANZLicId",
+"value": "12345678",
+"recursive": "true",
+"overwriteChildren": "true"
+},
+{
+"name": "datasetName",
+"value": "dataset-02",
+"recursive": "true",
+"overwriteChildren": "true"
+} ,
+{
+"name": "datasetOwnerId",
+"value": "Akash",
+"recursive": "true",
+"overwriteChildren": "true"
+}
+]
+}
+ */
+export const requestProjectEditMetaData = (project, objectPath, updates) => (dispatch) => {
+
+	dispatch(isRequestingEditMetaData());
+	return post('RDL-Publish-EditMetadata',{ "project": project, "objectPath": objectPath, "updates":updates })
+			.then((response) => dispatch(requestProjectEditMetaDataSuccess(response)))
+			.catch((error) => dispatch(requestProjectEditMetaDataError(error)));
+	
+	
+};
 
 
 
@@ -119,6 +165,15 @@ export const isRequestingProjects = () => ({
 	IsReady: false
 });
 
+/**
+ * Clear / reset reducer to load.
+ *
+ * @return {Object}
+ */
+export const isRequestingEditMetaData = () => ({
+	type: IS_REQUESTING_EDIT_METADATA,
+	IsReady: false
+});
 
 
 
@@ -136,6 +191,38 @@ export const requestProjectsSuccess = (projects) => ({
 	IsReady: true
 	
 });
+
+
+/**
+ * Successful
+ *
+ * @param {Object} projects
+ * @return {Object}
+ */
+
+
+
+
+export const requestProjectEditMetaDataSuccess = (response) => ({
+	
+	type: REQUEST_EDIT_METADATA,
+	response: response,
+	IsReady: true
+	
+});
+
+/**
+ * Prepare error to send to reducer.
+ *
+ * @param {Object} error 
+ * @return {Object}
+ */
+export const requestProjectEditMetaDataError = (error) => ({
+	type: METADATA_ERROR,
+	error,
+});
+
+
 
 /**
  * Prepare error to send to reducer.

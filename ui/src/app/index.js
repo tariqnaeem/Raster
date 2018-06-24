@@ -1,5 +1,4 @@
 import React from 'react';
-import SectionHeader from '../header';
 import Menu from '../projects/menu';
 import ContentViewer from '../content-viewer';
 import { ToastContainer } from 'react-toastify';
@@ -8,7 +7,7 @@ import './style.css';
 
 const App = () => (
 	<div className="App">
-		<SectionHeader title="Welcome" />
+		
 		<Menu />
 	</div>
 );

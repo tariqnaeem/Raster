@@ -10,7 +10,10 @@ import FolderIcon from '@material-ui/icons/Note';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import { Divider } from '@material-ui/core';
-export default class FormDialog extends React.Component {
+import * as actions from '../actions';
+import { connect} from 'react-redux';
+import { getState } from '../reducer';
+class FormDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -24,11 +27,25 @@ export default class FormDialog extends React.Component {
     this.handleClickOpen = this.handleClickOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.processFolders = this.processFolders.bind(this);
+    this.editMetaData = this.editMetaData.bind(this);
   }
   handleClickOpen(event, folder){
     this.setState({ DialogOpen: true, folderName:folder  });
   }
+ 
+  editMetaData(event){
+    var arrObjs = [{"name" : "datasetName", "value": this.state.DatasetName, 
+                    "recursive": true, "overwriteChildren": true }, 
+                    {"name" : "ANZLicId", "value": this.state.ANZACId, 
+                    "recursive": true, "overwriteChildren": true},
+                    {"name" : "datasetOwnerId", "value": this.state.datasetOwnerId, 
+                    "recursive": true, "overwriteChildren": true}];
+    
+    
+    this.props.requestProjectEditMetaData(this.props.projectName, this.state.folderName, arrObjs);
 
+      
+  }
   handleClose(){
     this.setState({ DialogOpen: false });
   }
@@ -94,7 +111,7 @@ export default class FormDialog extends React.Component {
               autoFocus
               margin="dense"
               id="datasetOwnerId"
-              label="Dataset Name"
+              label="Data Owner ID"
               onChange = {(event) => this.setState({ "datasetOwnerId": event.target.value })}
               type="text"
               fullWidth
@@ -104,7 +121,7 @@ export default class FormDialog extends React.Component {
             <Button onClick={this.handleClose} color="primary">
               Cancel
             </Button>
-            <Button onClick={this.handleClose} color="primary">
+            <Button onClick={(event) => this.editMetaData(event)} color="primary">
               Save
             </Button>
           </DialogActions>
@@ -113,3 +130,4 @@ export default class FormDialog extends React.Component {
     );
   }
 }
+export default connect(getState, actions)(FormDialog)
