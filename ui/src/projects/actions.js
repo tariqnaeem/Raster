@@ -8,6 +8,10 @@ export const IS_REQUESTING_PROJECTS = 'IS_REQUESTING_PROJECTS';
 export const IS_REQUESTING_EDIT_METADATA = 'IS_REQUESTING_EDIT_METADATA'; 
 export const REQUEST_EDIT_METADATA = 'REQUEST_EDIT_METADATA'; 
 export const METADATA_ERROR = 'METADATA_ERROR'; 
+export const IS_REQUESTING_DIRECTORY = 'IS_REQUESTING_DIRECTORY';
+export const DIRECTORY_ERROR = 'DIRECTORY_ERROR';
+export const REQUEST_DIRECTORY = 'REQUEST_DIRECTORY';
+
 
 
 
@@ -27,7 +31,7 @@ export const requestUnPublishProjects = (custodian, showAll) => (dispatch) => {
 
 	dispatch(isRequestingProjects());
 	
-	return post('RDL-Publish-ListProjects',{ "dataCustodian": custodian, "showAll": showAll, "showUningested": true })
+	return post('RDL-Publish-ListProjects',{ "dataCustodian": custodian, "showAll": false, "showUningested": true })
 			.then((projects) => dispatch(requestProjectsSuccess(projects)))
 			.catch((error) => dispatch(requestProjectsError(error)));
 	
@@ -74,6 +78,8 @@ export const requestIngestProject = (bucketName, projectName, dataCustodian, fol
 };
 
 
+
+
 /**
  * Request Unpublished Projects from API.
  * 
@@ -89,6 +95,65 @@ export const requestUnIngestedProjects = (custodian, showAll) => (dispatch) => {
 			.then((projects) => dispatch(requestProjectsSuccess(projects)))
 			.catch((error) => dispatch(requestProjectsError(error)));
 };
+
+
+/**
+ * Request MetaData Directory from API.
+ * 
+ * @param project
+ * @param list folder
+ * @param recursive
+ * @return list files
+ */
+
+export const requestProjectMetaDataDirectory = (project, listPath) => (dispatch) => {
+
+	dispatch(isRequestingDirectory());
+	
+	return post('RDL-Publish-ListContents',{ "project": project, "listFolder": listPath, "recursive": true, "listFiles": true  })
+			.then((directory) => dispatch(requestDirectorySuccess(directory)))
+			.catch((error) => dispatch(requestDirectoryError(error)));
+	
+	
+};
+
+/**
+ * Clear / reset reducer to load projects.
+ *
+ * @return {Object}
+ */
+export const isRequestingDirectory = () => ({
+	type: IS_REQUESTING_DIRECTORY,
+	isDirectory: false
+});
+
+/**
+ * Clear / reset reducer to load.
+ *
+ * @return {Object}
+ */
+
+export const requestDirectorySuccess = (directory) => ({
+	
+	type: REQUEST_DIRECTORY,
+	directory: directory,
+	isDirectory: true
+});
+
+/**
+ * Prepare error to send to reducer.
+ *
+ * @param {Object} error 
+ * @return {Object}
+ */
+export const requestDirectoryError = (error) => ({
+	type: DIRECTORY_ERROR,
+	error,
+});
+
+
+
+
 
 
 /**
@@ -115,32 +180,6 @@ export const requestProjectMetaData = (project, objectPath) => (dispatch) => {
  * 
  * @param {Object} 
  * @return {Promise}
- */
-/**
- * {
-"project": "Test-Publish",
-"objectPath": "rdsdatalakelambdatesting/Test-Publish/data",
-"updates": [
-{
-"name": "ANZLicId",
-"value": "12345678",
-"recursive": "true",
-"overwriteChildren": "true"
-},
-{
-"name": "datasetName",
-"value": "dataset-02",
-"recursive": "true",
-"overwriteChildren": "true"
-} ,
-{
-"name": "datasetOwnerId",
-"value": "Akash",
-"recursive": "true",
-"overwriteChildren": "true"
-}
-]
-}
  */
 export const requestProjectEditMetaData = (project, objectPath, updates) => (dispatch) => {
 

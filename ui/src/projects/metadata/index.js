@@ -7,12 +7,15 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import FolderIcon from '@material-ui/icons/Note';
+import AccordionCloseIcon from '@material-ui/icons/ExpandLess';
+import AccordionOpenIcon from '@material-ui/icons/ExpandMore'
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import { Divider } from '@material-ui/core';
 import * as actions from '../actions';
 import { connect} from 'react-redux';
 import { getState } from '../reducer';
+import Folder from '../metadata/directory'
 class FormDialog extends React.Component {
   constructor(props) {
     super(props);
@@ -55,6 +58,7 @@ class FormDialog extends React.Component {
     for(let i =0; i< folders.length;i++){
         arrFolders.push(
           <div key={"UnIngestedFolder"+i}>
+            <Folder projectName={this.props.projectName} listFolder={folders[i]} />
             <Tooltip
                 enterDelay={500}
                 id={"tooltip-controlled"+i}
@@ -73,7 +77,7 @@ class FormDialog extends React.Component {
   }
 
   render() {
-    
+    console.log(this.props);
     const folders = this.props.folders;
     const projectName = this.props.projectName;
     return (
