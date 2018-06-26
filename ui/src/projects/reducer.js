@@ -23,7 +23,7 @@ export const getState = ({ projects = {} }) => reducer;
 
 const reducer = (state = initialState, action) => {
 	let updated = initialState;
-console.log(action);
+
 	switch (action.type) {
 		case IS_REQUESTING_PROJECTS:
 			updated = {

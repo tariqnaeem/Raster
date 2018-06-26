@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import * as actions from '../actions';
@@ -16,7 +17,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import FolderIcon from '@material-ui/icons/Note';
 import FailedIcon from '@material-ui/icons/Cancel';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
+
 import Divider from '@material-ui/core/Divider';
 import purple from "@material-ui/core/colors/purple";
 

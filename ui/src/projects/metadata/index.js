@@ -15,7 +15,7 @@ import { Divider } from '@material-ui/core';
 import * as actions from '../actions';
 import { connect} from 'react-redux';
 import { getState } from '../reducer';
-import Folder from '../metadata/directory'
+import Directory from '../metadata/directory'
 class FormDialog extends React.Component {
   constructor(props) {
     super(props);
@@ -58,18 +58,18 @@ class FormDialog extends React.Component {
     for(let i =0; i< folders.length;i++){
         arrFolders.push(
           <div key={"UnIngestedFolder"+i}>
-            <Folder projectName={this.props.projectName} listFolder={folders[i]} />
-            <Tooltip
-                enterDelay={500}
-                id={"tooltip-controlled"+i}
-                leaveDelay={100}
-                open={this.state.open}
-                placement="bottom"
-                title={folders[i]}>
-              <IconButton aria-label={folders[i]} onClick={event => this.handleClickOpen(event, folders[i])}>
-                <FolderIcon />
-              </IconButton>
-            </Tooltip>
+             
+              <Tooltip
+                  enterDelay={500}
+                  id={"tooltip-controlled"+i}
+                  leaveDelay={100}
+                  open={this.state.open}
+                  placement="bottom"
+                  title={folders[i]}>
+                <IconButton aria-label={folders[i]} onClick={event => this.handleClickOpen(event, folders[i])}>
+                  <FolderIcon />
+                </IconButton>
+              </Tooltip>
           </div>
         )
     }
@@ -77,7 +77,7 @@ class FormDialog extends React.Component {
   }
 
   render() {
-    console.log(this.props);
+   
     const folders = this.props.folders;
     const projectName = this.props.projectName;
     return (
@@ -120,6 +120,7 @@ class FormDialog extends React.Component {
               type="text"
               fullWidth
             />
+             <IconButton><Directory projectName={this.props.projectName} listFolder={this.state.folderName} /></IconButton>
           </DialogContent>
           <DialogActions>
             <Button onClick={this.handleClose} color="primary">

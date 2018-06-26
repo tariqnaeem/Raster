@@ -57,7 +57,7 @@ class Views extends React.Component {
     }
     
     
-    console.log(this.props.projects);
+    
     return (
       <div>
         { isReady  &&  this.props.projects?  <Message message={this.props.projects} /> : ''}
