@@ -11,6 +11,9 @@ export const METADATA_ERROR = 'METADATA_ERROR';
 export const IS_REQUESTING_DIRECTORY = 'IS_REQUESTING_DIRECTORY';
 export const DIRECTORY_ERROR = 'DIRECTORY_ERROR';
 export const REQUEST_DIRECTORY = 'REQUEST_DIRECTORY';
+export const REQUEST_METADATA = 'REQUEST_METADATA';
+export const IS_REQUESTING_METADATA = 'IS_REQUESTING_METADATA';
+
 
 
 
@@ -166,14 +169,32 @@ export const requestDirectoryError = (error) => ({
  */
 export const requestProjectMetaData = (project, objectPath) => (dispatch) => {
 
-	dispatch(isRequestingProjects());
+	dispatch(isRequestingMetaData());
 	
 	return post('RDL-Publish-ListMetadata',{ "project": project, "objectPath": objectPath })
-			.then((projects) => dispatch(requestProjectsSuccess(projects)))
-			.catch((error) => dispatch(requestProjectsError(error)));
+			.then((metaData) => dispatch(requestMetaDataSuccess(metaData)))
+			.catch((error) => dispatch(requestMetaDataError(error)));
 	
 	
 };
+
+export const isRequestingMetaData = () =>({
+	type: IS_REQUESTING_METADATA,
+	IsReadyMetaData: false
+})
+
+export const requestMetaDataSuccess = (metaData) => ({
+	
+	type: REQUEST_METADATA,
+	metaData: metaData,
+	IsReadyMetaData: true
+	
+});
+
+export const requestMetaDataError = (error) =>({
+	type: METADATA_ERROR,
+	error,
+})
 
 /**
  * Request Project Edit MetaData from API.
@@ -203,6 +224,8 @@ export const isRequestingProjects = () => ({
 	type: IS_REQUESTING_PROJECTS,
 	IsReady: false
 });
+
+
 
 /**
  * Clear / reset reducer to load.

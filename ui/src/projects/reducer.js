@@ -8,7 +8,10 @@ import {
 	METADATA_ERROR,
 	DIRECTORY_ERROR,
 	REQUEST_DIRECTORY,
-	IS_REQUESTING_DIRECTORY
+	IS_REQUESTING_DIRECTORY,
+	IS_REQUESTING_METADATA,
+	REQUEST_METADATA
+
 } from './actions';
 
 const initialState = {};
@@ -58,12 +61,23 @@ const reducer = (state = initialState, action) => {
 				isDirectory: false,
 			};
 			break;
+		case IS_REQUESTING_METADATA:
+			updated = {
+				IsReadyMetaData: false,
+			};
+			break;
 		case REQUEST_DIRECTORY:
 			updated = {
 				isDirectory: true,
 				directory: action.directory
 			}
 			break;
+		case REQUEST_METADATA:
+		updated = {
+			IsReadyMetaData: true,
+			metaData: action.metaData
+		}
+		break;
 		case DIRECTORY_ERROR:
 			updated = initialState;
 			break;

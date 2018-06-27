@@ -8,7 +8,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-
+import  '../metadata/style.css';
 
 
 import * as actions from '../actions';
@@ -53,17 +53,27 @@ class Directory extends React.Component {
     
     return (
    
-        console.log(this.state.open), 
-    !(this.state.open) ? <div><div onClick={event => this.processDirectory(event)}><AccordionOpenIcon /></div> 
+       <div className="MetaDataDirectory">
+        {!(this.state.open) ? <List><ListItemIcon onClick={event => this.processDirectory(event)}><AccordionOpenIcon /></ListItemIcon>  
     
-    {this.props.directory && this.props.directory.results && this.props.directory.results.childItems.map(obj => {
-        let arrFolderPath =  obj.itemPath.split('/');
-        return(<div key={arrFolderPath[arrFolderPath.length-1]}><FolderIcon />{arrFolderPath[arrFolderPath.length-1]}<File data={obj.childItems}/></div>)
+       {this.props.directory && this.props.directory.results && this.props.directory.results.childItems.map(obj => {
+                    let arrFolderPath =  obj.itemPath.split('/');
+                    return( <div key={"div"+arrFolderPath[arrFolderPath.length-1]}>
+                                <ListItem key={arrFolderPath[arrFolderPath.length-1]}>
+                                    <ListItemIcon><FolderIcon /></ListItemIcon>
+                                    <ListItemText primary={arrFolderPath[arrFolderPath.length-1]} />
+                                </ListItem>
+                                <div className="MetaDataFiles"><List component="nav"><File data={obj.childItems}/></List></div>
+                            </div>)
                  
                
-            })}      
-    </div> : <div onClick={this.handleClose}><AccordionCloseIcon /></div>
+            })}      </List>
+        : <ListItemIcon onClick={this.handleClose}><AccordionCloseIcon /></ListItemIcon>
+   
 
-    )}
+    } 
+    </div>)
+     
+    }
 }
 export default connect(getState, actions)(Directory)
