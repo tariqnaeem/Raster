@@ -113,7 +113,7 @@ export const requestProjectMetaDataDirectory = (project, listPath) => (dispatch)
 
 	dispatch(isRequestingDirectory());
 	
-	return post('RDL-Publish-ListContents',{ "project": project, "listFolder": listPath, "recursive": true, "listFiles": true  })
+	return post('RDL-Publish-ListContents',{ "projectName": project, "listFolder": listPath, "recursive": true, "listFiles": true  })
 			.then((directory) => dispatch(requestDirectorySuccess(directory)))
 			.catch((error) => dispatch(requestDirectoryError(error)));
 	
@@ -171,7 +171,7 @@ export const requestProjectMetaData = (project, objectPath) => (dispatch) => {
 
 	dispatch(isRequestingMetaData());
 	
-	return post('RDL-Publish-ListMetadata',{ "project": project, "objectPath": objectPath })
+	return post('RDL-Publish-ListMetadata',{ "projectName": project, "objectPath": objectPath })
 			.then((metaData) => dispatch(requestMetaDataSuccess(metaData)))
 			.catch((error) => dispatch(requestMetaDataError(error)));
 	

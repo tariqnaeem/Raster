@@ -14,6 +14,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import Directory from '../metadata/directory';
 import TextField from '@material-ui/core/TextField';
+import FolderIcon from '@material-ui/icons/Note';
 import * as actions from '../actions';
 import { connect} from 'react-redux';
 import { getState } from '../reducer';
@@ -41,17 +42,20 @@ class MetaDataDialog extends React.Component {
         datasetOwnerId: "",
         folderName: "",
         projectName: "",
-        open: this.props.status
+        open: false
       };
       this.handleClose = this.handleClose.bind(this);
       this.editMetaData = this.editMetaData.bind(this);
+      this.handleClickOpen = this.handleClickOpen.bind(this);
   }
    
 
-
+  handleClickOpen(event, folder){
+    this.setState({ open: true, folderName:folder});
+    this.props.requestProjectMetaData(this.props.projectName, folder);
+  }
   handleClose(){
     this.setState({ open: false });
-    
   }
 
   editMetaData(event){
@@ -68,15 +72,16 @@ class MetaDataDialog extends React.Component {
   }
 
   render() {
-    console.log(this.props.status);
+ 
     if(this.state.folderName != this.props.folderName ){
-        this.setState({ folderName: this.props.folderName,
-                        projectName: this.props.projectName})
+        this.setState({ folderName: this.props.folderName, projectName: this.props.projectName})
     }
 
     return (
-      <div>
-        
+    <div>
+        <IconButton aria-label={this.props.folderName} onClick={event => this.handleClickOpen(event, this.props.folderName)}>
+            <FolderIcon />
+        </IconButton>
         <Dialog
           fullScreen
           open={this.state.open}
