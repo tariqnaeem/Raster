@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import CircularProgress from "@material-ui/core/CircularProgress";
+import purple from "@material-ui/core/colors/purple";
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -18,6 +19,9 @@ import FolderIcon from '@material-ui/icons/Note';
 import * as actions from '../actions';
 import { connect} from 'react-redux';
 import { getState } from '../reducer';
+import { ListItem } from '@material-ui/core';
+import List from '@material-ui/core/List';
+
 
 const styles = {
   appBar: {
@@ -93,34 +97,26 @@ class MetaDataDialog extends React.Component {
             <DialogContentText>
               {"Project : "+this.props.projectName}
             </DialogContentText>
-                <TextField
-                autoFocus
-                margin="dense"
-                id="ANZACId"
-                label="ANZLIC ID"
-                onChange = {(event) => this.setState({ "ANZACId": event.target.value })}
-                type="text"
-                fullWidth/>
+            <List>
             
-                <TextField
-                autoFocus
-                margin="dense"
-                id="DatasetName"
-                label="Dataset Name"
-                onChange = {(event) => this.setState({ "datasetName": event.target.value })}
-                type="text"
-                fullWidth />
-            
-                <TextField
-                autoFocus
-                margin="dense"
-                id="datasetOwnerId"
-                label="Data Owner ID"
-                onChange = {(event) => this.setState({ "datasetOwnerId": event.target.value })}
-                type="text"
-                fullWidth/>
-           
-                <IconButton><Directory projectName={this.props.projectName} listFolder={this.props.folderName} /></IconButton>
+                {
+                  this.props.IsReadyMetaData  ?  this.props.metaData.metadata.map(item => {
+              
+                    return(
+                      <ListItem key={item.name}><TextField
+                      autoFocus
+                      margin="dense"
+                      key={item.name}
+                      value={this.state[item.name] ? this.state[item.name] : item.value}
+                      label={item.name}
+                      onChange = {(event) => this.setState({ [item.name]: event.target.value })}
+                      type="text"
+                      fullWidth/></ListItem>
+                    )
+                  }) : <CircularProgress style={{ color: purple[500] }} thickness={4} /> } 
+                {this.props.metaData  ? <ListItem>
+                  <Directory projectName={this.props.projectName} listFolder={this.props.folderName} />
+                  </ListItem> : ''} </List>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={this.handleClose} color="primary">

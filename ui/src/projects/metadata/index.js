@@ -29,9 +29,7 @@ class FormDialog extends React.Component {
         arrFolders.push(
           <div key={"UnIngestedFolder"+i}>
               <Tooltip
-                  enterDelay={500}
                   id={"tooltip-controlled"+i}
-                  leaveDelay={100}
                   placement="bottom"
                   title={folders[i]}>
                   <DialogMetaData  projectName={this.props.projectName} folderName={folders[i]}   />
