@@ -104,19 +104,21 @@ class MetaDataDialog extends React.Component {
               
                     return(
                       <ListItem key={item.name}><TextField
-                      autoFocus
-                      margin="dense"
-                      key={item.name}
-                      value={this.state[item.name] ? this.state[item.name] : item.value}
-                      label={item.name}
-                      onChange = {(event) => this.setState({ [item.name]: event.target.value })}
-                      type="text"
-                      fullWidth/></ListItem>
+                                autoFocus
+                                margin="dense"
+                                key={item.name}
+                                value={this.state[item.name] ? this.state[item.name] : item.value}
+                                label={item.name}
+                                onChange = {(event) => this.setState({ [item.name]: event.target.value })}
+                                type="text"
+                                fullWidth/>
+                      </ListItem>
                     )
                   }) : <CircularProgress style={{ color: purple[500] }} thickness={4} /> } 
-                {this.props.metaData  ? <ListItem>
-                  <Directory projectName={this.props.projectName} listFolder={this.props.folderName} />
-                  </ListItem> : ''} </List>
+                {this.props.metaData && this.props.IsReadyMetaData  ? 
+                    <ListItem>
+                        <Directory projectName={this.props.projectName} listFolder={this.props.folderName} />
+                    </ListItem> : ''} </List>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={this.handleClose} color="primary">

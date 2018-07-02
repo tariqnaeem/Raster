@@ -171,7 +171,7 @@ export const requestProjectMetaData = (project, objectPath) => (dispatch) => {
 
 	dispatch(isRequestingMetaData());
 	
-	return post('RDL-Publish-ListMetadata',{ "projectName": project, "objectPath": objectPath })
+	return post('RDL-Publish-ListMetadata',{ "projectName": project, "objectPath": objectPath, "recursive": false, "listFiles": true })
 			.then((metaData) => dispatch(requestMetaDataSuccess(metaData)))
 			.catch((error) => dispatch(requestMetaDataError(error)));
 	

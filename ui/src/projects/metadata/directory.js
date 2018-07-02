@@ -14,28 +14,34 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-
-
+import Checkbox from '@material-ui/core/Checkbox';
 import * as actions from '../actions';
 import { connect} from 'react-redux';
 import { getState } from '../reducer';
-import File from '../metadata/file';
 import { BUCKET } from '../../constants';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import purple from "@material-ui/core/colors/purple";
+import Tooltip from '@material-ui/core/Tooltip';
+import FileIcon from '@material-ui/icons/FileDownload';
 class Directory extends React.Component {
   
-    constructor(props) {
+constructor(props) {
     super(props);
     this.state = {
       open: false,
+      openFolder : "",
       directory: [],
       projectName : this.props.projectName,
-      listFolder: this.props.listFolder.replace(BUCKET+'/','')
+      listFolder: this.props.listFolder.replace(BUCKET+'/',''),
+      folderChecked: [],
+      fileChecked:[]
     };
 
     this.processDirectory = this.processDirectory.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.openPanel = this.openPanel.bind(this);
+    this.handleToggle = this.handleToggle.bind(this);
+    this.handleFileToggle = this.handleFileToggle.bind(this);
  
   }
   processDirectory(event){
@@ -43,12 +49,49 @@ class Directory extends React.Component {
    this.setState({ open: !(this.state.open) });
    
   }
+  openPanel(event, panel){
+    if(this.state.openFolder == panel){
+        this.setState({ openFolder: "" });
+    } else {
+        this.setState({ openFolder: panel });
+    }
+  }
  
   
   handleClose(){
     this.setState({ open: !(this.state.open) ,directory :[] });
     
   }
+
+  handleToggle(event, value) {
+    const { folderChecked } = this.state;
+    const currentIndex = folderChecked.indexOf(value);
+    const newChecked = [...folderChecked];
+
+    if (currentIndex === -1) {
+      newChecked.push(value);
+    } else {
+      newChecked.splice(currentIndex, 1);
+    }
+    this.setState({folderChecked: newChecked});
+
+    console.log(newChecked);
+  }
+
+  handleFileToggle(event, value){
+    const { fileChecked } = this.state;
+    const currentIndex = fileChecked.indexOf(value);
+    const newChecked = [...fileChecked];
+
+    if (currentIndex === -1) {
+        newChecked.push(value);
+    } else {
+        newChecked.splice(currentIndex, 1);
+    }
+  this.setState({fileChecked: newChecked, folderChecked :[]});
+
+  console.log(newChecked);
+}
 
   
 
@@ -64,26 +107,58 @@ class Directory extends React.Component {
    
        <div className="MetaDataDirectory">
         <ExpansionPanel expanded={this.state.open} onChange={(event) => this.processDirectory(event)}>
-          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography>Metadata File(s)</Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
-            <Typography>
-                <List>
-            {this.props.directory && this.props.directory.results && 
-            this.props.directory.results.childItems ? this.props.directory.results.childItems.map(obj => {
-                    let arrFolderPath =  obj.itemPath.split('/');
-                    return( <div key={"div"+arrFolderPath[arrFolderPath.length-1]}>
-                                <ListItem key={arrFolderPath[arrFolderPath.length-1]}>
-                                    <ListItemIcon><FolderIcon /></ListItemIcon>
-                                    <ListItemText primary={arrFolderPath[arrFolderPath.length-1]} />
-                                </ListItem>
-                                <div className="MetaDataFiles"><List component="nav"><File data={obj.childItems}/></List></div>
-                            </div>)
+            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography>Metadata File(s)</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+                {   this.props.directory && this.props.directory.results && this.props.directory.results.childItems ? 
+                    this.props.directory.results.childItems.map(obj => {
+                        let arrFolderPath =  obj.itemPath.split('/');
+                        return( <div key={"div"+arrFolderPath[arrFolderPath.length-1]}>
+                                        <ExpansionPanel expanded={this.state.openFolder == "folder"+arrFolderPath[arrFolderPath.length-1]} 
+                                                        onChange={(event) => this.openPanel(event, "folder"+arrFolderPath[arrFolderPath.length-1])} 
+                                                        key={"div"+arrFolderPath[arrFolderPath.length-1]}>
+                                            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                                                <Typography>
+                                                    <Checkbox
+                                                        onChange={(event) => this.handleToggle(event, obj.itemPath)}
+                                                        checked={this.state.folderChecked.indexOf(obj.itemPath) !== -1}/>
+                                                    <FolderIcon />{arrFolderPath[arrFolderPath.length-1]}
+                                                </Typography>
+                                            </ExpansionPanelSummary>
+                                            <ExpansionPanelDetails>
+                                            {this.state.openFolder == "folder"+arrFolderPath[arrFolderPath.length-1] ?
+                                                    <div className="MetaDataFiles">
+                                                        <List component="nav">
+                                                            {obj.childItems && obj.childItems.map(fileObj => {
+                                                                let arrFilePath = fileObj.itemPath.split('/');
+                                                               
+                                                                    return(<Tooltip    key={"tooltip-controlled"+fileObj.itemPath}
+                                                                                placement="right-end"
+                                                                                title={fileObj.itemPath}>
+                                                                        <ListItem key={fileObj.itemPath}>
+                                                                           
+                                                                                <Checkbox   onChange={(event) => this.handleFileToggle(event, fileObj.itemPath)}
+                                                                                            checked={this.state.fileChecked.indexOf(fileObj.itemPath) !== -1}/>
+                                                                                <FileIcon />
+                                                                            
+                                                                            <ListItemText primary={arrFilePath[arrFilePath.length-1]} />
+                                                                        </ListItem>
+                                                                    </Tooltip>)
+                                                               
+                                                            })
+                                                        }
+                                                            
+                                                        </List>
+                                                    </div> : ''
+                                            }            
+                                            </ExpansionPanelDetails>
+                                        </ExpansionPanel>
+                                    </div>)
                  
                
-            }) : <CircularProgress style={{ color: purple[500] }} thickness={4} /> }</List>
-            </Typography>
+                        }) : <CircularProgress style={{ color: purple[500] }} thickness={4} /> }
+            
           </ExpansionPanelDetails>
         </ExpansionPanel>
             
