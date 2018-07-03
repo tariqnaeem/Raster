@@ -77,7 +77,7 @@ class MetaDataDialog extends React.Component {
     this.props.metaData.metadata.map(item => {
         let parameterObj = {};
             parameterObj.name  =  item.name;
-            parameterObj.value =  this.state[item.name];
+            parameterObj.value =  this.state[item.name] ? this.state[item.name] : item.value ;
             parameterObj.recursive = recursive;
             parameterObj.overwriteChildren = true;
 
@@ -87,11 +87,35 @@ class MetaDataDialog extends React.Component {
     /**
      * Looping via selected folders
     **/
-    this.state.folderChecked.map(folder => {
-        
+    if(this.state.folderChecked.length > 0){
+      
+      this.state.folderChecked.map(folder => {  
         this.props.requestProjectEditMetaData(this.state.projectName, folder, arrObjs);
+      });
+    } else {
+
+      let parameterObj = {};
+          parameterObj.name = "CPSGCode";
+          parameterObj.value = this.state.CPSGCode;
+          parameterObj.recursive = recursive;
+          parameterObj.overwriteChildren = true;
+
+          arrObjs.push(parameterObj);
+
+          parameterObj = {};
+          parameterObj.name = "spatial";
+          parameterObj.value = this.state.spatial;
+          parameterObj.recursive = recursive;
+          parameterObj.overwriteChildren = true;
+
+          arrObjs.push(parameterObj);
+
+          this.state.fileChecked.map(folder => {  
+            this.props.requestProjectEditMetaData(this.state.projectName, folder, arrObjs);
+          });
+      
+    }
     
-    });
   }
 
     handleToggle(value) {

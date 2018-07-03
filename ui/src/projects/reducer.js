@@ -35,7 +35,7 @@ const reducer = (state = initialState, action) => {
 			break;
 		case IS_REQUESTING_EDIT_METADATA:
 			updated = {
-				isReady: false,
+				IsReadyMetaData: false,
 			};
 			break;
 		case REQUEST_PROJECTS:
@@ -46,7 +46,7 @@ const reducer = (state = initialState, action) => {
 			break;
 		case REQUEST_EDIT_METADATA:
 			updated = {
-				isReady: true,
+				IsReadyMetaData: true,
 				response: action.response,
 			};
 			break;

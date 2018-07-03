@@ -155,10 +155,6 @@ export const requestDirectoryError = (error) => ({
 });
 
 
-
-
-
-
 /**
  * Request Project MetaData from API.
  * 
@@ -234,7 +230,7 @@ export const isRequestingProjects = () => ({
  */
 export const isRequestingEditMetaData = () => ({
 	type: IS_REQUESTING_EDIT_METADATA,
-	IsReady: false
+	IsReadyMetaData: false
 });
 
 
@@ -269,7 +265,7 @@ export const requestProjectEditMetaDataSuccess = (response) => ({
 	
 	type: REQUEST_EDIT_METADATA,
 	response: response,
-	IsReady: true
+	IsReadyMetaData: true
 	
 });
 
