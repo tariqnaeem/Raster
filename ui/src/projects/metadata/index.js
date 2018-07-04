@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import Tooltip from '@material-ui/core/Tooltip';
+
 import IconButton from '@material-ui/core/IconButton';
 import * as actions from '../actions';
 import { connect} from 'react-redux';
@@ -14,31 +14,8 @@ class FormDialog extends React.Component {
       folderName: "",
       projectName: this.props.projectName
     };
-   
-    this.processFolders = this.processFolders.bind(this);
-    
   }
   
- 
-  
-  
-
-  processFolders(folders){
-    let arrFolders = [];
-    for(let i =0; i< folders.length;i++){
-        arrFolders.push(
-          <div key={"UnIngestedFolder"+i}>
-              <Tooltip
-                  id={"tooltip-controlled"+i}
-                  placement="bottom"
-                  title={folders[i]}>
-                  <DialogMetaData  projectName={this.props.projectName} folderName={folders[i]}   />
-              </Tooltip>
-          </div>
-        )
-    }
-    return arrFolders;
-  }
 
   render() {
   
@@ -46,7 +23,10 @@ class FormDialog extends React.Component {
     const projectName = this.props.projectName;
     return (
       <div>
-        {this.processFolders(folders)}
+       
+        <div key={"UnIngestedFolder"}>
+            <DialogMetaData  projectName={this.props.projectName} folderName={folders[0]}   />
+        </div>
         
       </div>
     );

@@ -26,6 +26,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import {EPSG_CODES, SPATIAL} from '../../constants';
+import Tooltip from '@material-ui/core/Tooltip';
 
 
 function Transition(props) {
@@ -149,16 +150,18 @@ class MetaDataDialog extends React.Component {
     }
 
     render() {
- 
+        let arrFolderPath = this.props.folderName.split('/');
         if(this.state.folderName != this.props.folderName ){
             this.setState({ folderName: this.props.folderName, projectName: this.props.projectName})
         }
 
         return (
         <div>
+            
             <IconButton aria-label={this.props.folderName} onClick={event => this.handleClickOpen(event, this.props.folderName)}>
                 <FolderIcon />
             </IconButton>
+            {arrFolderPath[arrFolderPath.length-1]}
             <Dialog
             fullScreen
             open={this.state.open}
@@ -187,7 +190,7 @@ class MetaDataDialog extends React.Component {
                         }
                         {
                    
-                        this.state.fileChecked.length > 0 ? 
+                        this.state.fileChecked.length > 0 && this.props.IsReadyMetaData ? 
                         <div>    
                             <FormControl>
                                 <InputLabel htmlFor="select-multiple">CPSG Code</InputLabel>

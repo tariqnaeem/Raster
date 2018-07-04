@@ -14,6 +14,11 @@ export const REQUEST_DIRECTORY = 'REQUEST_DIRECTORY';
 export const REQUEST_METADATA = 'REQUEST_METADATA';
 export const IS_REQUESTING_METADATA = 'IS_REQUESTING_METADATA';
 
+export const IS_REQUESTING_PUBLISH_PROJECTS = 'IS_REQUESTING_PUBLISH_PROJECTS';
+
+export const IS_PUBLISH_PROJECTS = 'IS_PUBLISH_PROJECTS';
+
+export const PUBLISH_PROJECTS_ERROR = 'PUBLISH_PROJECTS_ERROR';
 
 
 
@@ -54,12 +59,43 @@ export const requestUnPublishProjects = (custodian, showAll) => (dispatch) => {
 
 export const requestPublishProject = ( projectName, emailReport, returnReport, publish) => (dispatch) => {
 
-	dispatch(isRequestingProjects());
+	dispatch(isRequestingPublishProjects());
 	
-	return post('RDL-Publish-ValidateProject', { "project": projectName, "emailReport": emailReport, "returnReport" : returnReport, "publish" : publish })
-			.then((projects) => dispatch(requestProjectsSuccess(projects)))
-			.catch((error) => dispatch(requestProjectsError(error)));
+	return post('RDL-Publish-ValidateProject', { "projectName": projectName, "emailReport": emailReport, "returnReport" : returnReport, "publish" : publish })
+			.then((publishProjects) => dispatch(requestPublishProjectsSuccess(publishProjects)))
+			.catch((error) => dispatch(requestPublishProjectsError(error)));
 };
+
+/**
+ * Clear / reset reducer to publish projects.
+ *
+ * @return {Object}
+ */
+export const isRequestingPublishProjects = () => ({
+	type: IS_REQUESTING_PUBLISH_PROJECTS,
+	IsReadyPublishProjects: false
+});
+
+export const requestPublishProjectsSuccess = (publishProjects) => ({
+	
+	type: IS_PUBLISH_PROJECTS,
+	publishProjects: publishProjects,
+	IsReadyPublishProjects: true
+});
+
+/**
+ * Prepare error to send to reducer.
+ *
+ * @param {Object} error 
+ * @return {Object}
+ */
+export const requestPublishProjectsError = (error) => ({
+	type: PUBLISH_PROJECTS_ERROR,
+	error,
+});
+
+
+
 
 
 /**
@@ -94,7 +130,7 @@ export const requestUnIngestedProjects = (custodian, showAll) => (dispatch) => {
 
 	dispatch(isRequestingProjects());
 	
-	return post('RDL-Publish-ListProjects',{ "dataCustodian": custodian, "showAll": showAll, "showUningested": true })
+	return post('RDL-Publish-ListProjects',{ "dataCustodian": custodian, "showAll": false, "showUningested": true })
 			.then((projects) => dispatch(requestProjectsSuccess(projects)))
 			.catch((error) => dispatch(requestProjectsError(error)));
 };
@@ -201,7 +237,7 @@ export const requestMetaDataError = (error) =>({
 export const requestProjectEditMetaData = (project, objectPath, updates) => (dispatch) => {
 
 	dispatch(isRequestingEditMetaData());
-	return post('RDL-Publish-EditMetadata',{ "project": project, "objectPath": objectPath, "updates":updates })
+	return post('RDL-Publish-EditMetadata',{ "projectName": project, "objectPath": objectPath, "updates":updates })
 			.then((response) => dispatch(requestProjectEditMetaDataSuccess(response)))
 			.catch((error) => dispatch(requestProjectEditMetaDataError(error)));
 	

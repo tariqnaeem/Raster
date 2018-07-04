@@ -21,10 +21,14 @@ import FolderIcon from '@material-ui/icons/Note';
 import '../list/style.css';
 import DialogMetaData from '../metadata';
 import {ADMIN_EMAIL} from '../../constants'
-
-
+import * as actions from '../actions';
+import { connect} from 'react-redux';
+import { compose } from 'redux'
+import { getState } from '../reducer';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
+import Processing from '../processing';
+import Error from '../response/error';
 
 let counter = 0;
 function createData(name, projectName, folders) {
@@ -292,7 +296,10 @@ class EnhancedTable extends React.Component {
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
     return (
+      
       <Paper className={classes.root}>
+        {this.props.IsReadyPublishProjects == false ? <Processing /> : ''}
+        {this.props.Error > 0 ? <Error message={"ERROR: " + this.props.Error + " Cannot publish. Please contact gis.helpdesk@delwp.vic.gov.au for assistance"} status={true} /> : ''}
         <EnhancedTableToolbar numSelected={selected.length} view={view} handlePublish={this.handlePublish} />
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-labelledby="tableTitle">
@@ -351,4 +358,4 @@ EnhancedTable.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(EnhancedTable);
+export default compose(withStyles(styles), connect(getState, actions))(EnhancedTable);

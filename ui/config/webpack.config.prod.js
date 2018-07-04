@@ -13,7 +13,7 @@ const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
 const cssnext = require('postcss-cssnext');
-const theme = require('../src/theme');
+
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
@@ -193,7 +193,7 @@ module.exports = {
                           cssnext({
                             features: {
                               customProperties: {
-                                variables: theme
+                                variables: ""
                               }
                             },
                             browsers: [

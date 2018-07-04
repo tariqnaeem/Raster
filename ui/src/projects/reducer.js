@@ -10,7 +10,10 @@ import {
 	REQUEST_DIRECTORY,
 	IS_REQUESTING_DIRECTORY,
 	IS_REQUESTING_METADATA,
-	REQUEST_METADATA
+	REQUEST_METADATA,
+	IS_REQUESTING_PUBLISH_PROJECTS,
+	IS_PUBLISH_PROJECTS,
+	PUBLISH_PROJECTS_ERROR
 
 } from './actions';
 
@@ -33,6 +36,26 @@ const reducer = (state = initialState, action) => {
 				isReady: false,
 			};
 			break;
+		case IS_REQUESTING_PUBLISH_PROJECTS:
+			updated = {
+				IsReadyPublishProjects: false,
+			};
+			break;
+		case IS_PUBLISH_PROJECTS:
+			updated = {
+				IsReadyPublishProjects: true,
+				publishProjects: action.publishProjects,
+			};
+			break;
+		
+		case PUBLISH_PROJECTS_ERROR:	
+			
+				
+				updated = {
+				Error : action.error,
+				IsReadyPublishProjects: true,
+			}
+			break;
 		case IS_REQUESTING_EDIT_METADATA:
 			updated = {
 				IsReadyMetaData: false,
@@ -54,8 +77,15 @@ const reducer = (state = initialState, action) => {
 			updated = initialState;
 			break;
 		case PROJECTS_ERROR:
-			updated = initialState;
+			
+			updated = {
+				Error : action.error,
+				isReady: false,
+				projects : ""
+			}
+			
 			break;
+		
 		case IS_REQUESTING_DIRECTORY:
 			updated = {
 				isDirectory: false,

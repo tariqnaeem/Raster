@@ -91,6 +91,7 @@ constructor(props) {
             <ExpansionPanelDetails>
             <List>
                 {   this.props.directory && this.props.directory.results && this.props.directory.results.childItems ? 
+                    
                     this.props.directory.results.childItems.map(obj => {
                         let arrFolderPath =  obj.itemPath.split('/');
                         return( <div key={"div"+arrFolderPath[arrFolderPath.length-1]}>
@@ -98,7 +99,8 @@ constructor(props) {
                                                         key={"div"+arrFolderPath[arrFolderPath.length-1]}>
                                             <ExpansionPanelSummary  expandIcon={<ExpandMoreIcon />}>
                                                 <Typography>
-                                                    <Checkbox   onChange={(event) => this.handleToggle(event, obj.itemPath)} checked={this.props.folderChecked.indexOf(obj.itemPath) !== -1}/>
+                                                    <Checkbox   onChange={(event) => this.handleToggle(event, obj.itemPath)} 
+                                                                checked={this.props.folderChecked.indexOf(obj.itemPath) !== -1}/>
                                                     <div className="Directory" onClick={(event) => this.openPanel(event, "folder"+arrFolderPath[arrFolderPath.length-1])}>
                                                         <FolderIcon />{arrFolderPath[arrFolderPath.length-1]}
                                                     </div>

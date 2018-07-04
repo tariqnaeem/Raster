@@ -1,7 +1,6 @@
 import React from 'react';
 import Ingest from '../ingest/uningested';
 import List from '../list';
-import Response from '../response';
 import {ADMIN} from '../../constants';
 import * as actions from '../actions';
 import { connect} from 'react-redux';
@@ -21,9 +20,7 @@ class Views extends React.Component {
     this.DisplayView = this.RequestProjects.bind(this);
   }
   
-  /*componentWillMount(){
-    this.RequestProjects(this.props.view);
-  }*/
+  
 
   RequestProjects(view){
      
@@ -44,6 +41,7 @@ class Views extends React.Component {
     
     const { projects, isReady}  = this.props.requests;
     
+    this.props.response && this.props.response.status ? console.log(this.props.response.Response) : '';
     if(this.props.view != this.state.view ){
       this.RequestProjects(this.props.view);
       this.setState({view: this.props.view, projects: this.props.projects});
@@ -60,13 +58,12 @@ class Views extends React.Component {
     
     return (
       <div>
-        { isReady  &&  this.props.projects?  <Message message={this.props.projects} /> : ''}
+        
+        { isReady  &&  this.props.projects ?  <Message message={this.props.projects} /> : ''}
         {
           this.props.view == "INGEST" ?  
             !(isReady) ? <Processing /> : !(this.props.projects.uningestedFolders) ? this.RequestProjects(this.props.view) : <Ingest data={this.props.projects.uningestedFolders} requests={this.props.requests} /> : 
-            !(isReady) ? <Processing /> :<List data={this.props.projects.projects}  view={this.props.view}  requests={this.props.requests} />}
-            {this.props.projects && this.props.projects.emailedTo ? 
-            <Response response={this.props.projects}/> :''}  
+            !(isReady) ? <Processing /> :<List data={this.props.projects.projects}  view={this.props.view}  requests={this.props.requests} />}  
       </div>
     );
   }
