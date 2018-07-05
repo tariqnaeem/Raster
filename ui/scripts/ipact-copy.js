@@ -7,12 +7,12 @@ const path = require('path');
 const BUILD_FOLDER = path.join(process.cwd(), 'build', 'static');
 const BUILD_CSS_FOLDER = path.join(BUILD_FOLDER, '/css/*');
 const BUILD_JS_FOLDER = path.join(BUILD_FOLDER, '/js/*');
-const IPACT_PUBLIC_FOLDER = path.resolve(process.cwd(), '../../../public/');
-const IPACT_JS_FOLDER = path.join(IPACT_PUBLIC_FOLDER, 'js/network-audit/');
-const IPACT_CSS_FOLDER = path.join(IPACT_PUBLIC_FOLDER, 'css/network-audit/');
+const IPACT_PUBLIC_FOLDER = path.resolve(process.cwd(), 'public');
+const IPACT_JS_FOLDER = path.join(IPACT_PUBLIC_FOLDER, 'js/');
+const IPACT_CSS_FOLDER = path.join(IPACT_PUBLIC_FOLDER, 'css/');
 
-const IPACT_CSS_NAME = 'network-audit.css';
-const IPACT_JS_NAME = 'network-audit.js';
+const IPACT_CSS_NAME = 'raster.css';
+const IPACT_JS_NAME = 'raster.js';
 
 const FILES_TO_COPY = [
     {
