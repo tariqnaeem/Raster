@@ -41,8 +41,8 @@ class Menu extends React.Component {
 render() {
   
   return (
-    <div style="margin-top: 70px;">
-      <div className="align-center">
+    <div>
+      <div>
         <Button variant="contained" color="primary"  onClick={() => { this.setState({view : 'INGEST'}) }}>
           Ingest New Project
           <FileUpload />
