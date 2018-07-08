@@ -16,14 +16,16 @@ const styles = theme => ({
 class SimpleSnackbar extends React.Component {
   constructor(props){
     super(props);
-
-   
     this.handleClose= this.handleClose.bind(this);
-
   }
+  
+  
+  
+  
 
   handleClose(event, reason){
     this.props.close();
+
   }
 
   render() {
@@ -44,7 +46,14 @@ class SimpleSnackbar extends React.Component {
           ContentProps={{
             "aria-describedby": "message-id"
           }}
-          message={<span id="message-id">{message}</span>}
+          message={ <span id="message-id">
+                        <div>{"Publish Status: "+message.publishStatus}</div>
+                        <div>{"Result: "+message.validationResult}</div>
+                        {message.datasetReport.length > 0 && message.datasetReport[0].datasetFileReport.length > 0 ? 
+                            <div>{"Error(s) : "+message.datasetReport[0].datasetFileReport[0].validationErrors.map(item => (
+                                <div key={item}>{item}</div>
+                        ))}</div> : ""}
+                    </span>}
           action={[
             <IconButton
               key="close"

@@ -3,6 +3,7 @@ export const ADMIN = url ? url.substring(0, url.lastIndexOf("@")) : '';
 export const BUCKET = 'rdsdatalakelambdatesting';
 export const ADMIN_EMAIL = 'alena.moison@delwp.vic.gov.au';
 export const DISCLAIMER_ID = ['Default'];
+export const BOOL = ['Y', 'N'];
 export const SECURITY_CLASSIFICATION_ID = [ 'Unclassified', 'Unclassified - Public Domain',
                                             'Security Classified - Protected',
                                             'Security Classified - Confidential',

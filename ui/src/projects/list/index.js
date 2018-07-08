@@ -29,7 +29,7 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 import Processing from '../processing';
 import Error from '../response/error';
-
+import Report from '../response/report';
 let counter = 0;
 function createData(name, projectName, folders) {
   counter += 1;
@@ -200,6 +200,8 @@ class EnhancedTable extends React.Component {
       data: projects,
       page: 0,
       rowsPerPage: 5,
+      reportStatus: false,
+      errorStatus: false
     };
     this.handleRequestSort = this.handleRequestSort.bind(this);
     this.handleSelectAllClick = this.handleSelectAllClick.bind(this);
@@ -208,9 +210,17 @@ class EnhancedTable extends React.Component {
     this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
     this.isSelected = this.isSelected.bind(this);
     this.handlePublish = this.handlePublish.bind(this);
+    this.close = this.close.bind(this);
+    this.closeError = this.closeError.bind(this);
   }
 
- 
+ close(){
+   this.setState({reportStatus : false});
+ }
+
+ closeError(){
+  this.setState({errorStatus : false});
+}
 
   handleRequestSort(event, property) {
     const orderBy = property;
@@ -255,6 +265,7 @@ class EnhancedTable extends React.Component {
       }
     }
       this.props.requests.requestPublishProject(arrProjects[0], arrEmails, true, true);
+      this.setState({reportStatus : true});
   }
 
   handleClick (event, id) {
@@ -294,12 +305,14 @@ class EnhancedTable extends React.Component {
     const { classes, view } = this.props;
     const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
-
+    console.log(this.props);
     return (
       
       <Paper className={classes.root}>
+      {this.props.publishProjects && this.props.publishProjects.datasetReport ? <Report message={this.props.publishProjects} close={this.close} 
+      status={this.state.reportStatus}  /> : ""}
         {this.props.IsReadyPublishProjects == false ? <Processing /> : ''}
-        {this.props.Error > 0 ? <Error message={"ERROR: " + this.props.Error + " Cannot publish. Please contact gis.helpdesk@delwp.vic.gov.au for assistance"} status={true} /> : ''}
+        {this.props.Error > 0 ? <Error message={"ERROR: " + this.props.Error + " Cannot publish. Please contact gis.helpdesk@delwp.vic.gov.au for assistance"} close={this.closeError} status={this.state.errorStatus} /> : ''}
         <EnhancedTableToolbar numSelected={selected.length} view={view} handlePublish={this.handlePublish} />
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-labelledby="tableTitle">

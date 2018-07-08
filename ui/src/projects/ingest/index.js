@@ -20,13 +20,17 @@ import { getState } from '../reducer';
 
 
 class InputAdornments extends React.Component {
+  
+  
   constructor(props) {
     super(props);
     this.create = this.create.bind(this);
     this.ingest = this.ingest.bind(this);
     this.state = {};
 }
-  ingest(event,index){
+  
+
+ingest(event,index){
     
     /*bucketName
       projectName 
@@ -83,6 +87,7 @@ class InputAdornments extends React.Component {
   render() {
     
     const { projects, isReady } = this.props;
+    
     
   
     return (
