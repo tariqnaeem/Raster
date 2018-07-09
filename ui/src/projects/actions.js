@@ -5,9 +5,9 @@ export const REQUEST_PROJECTS = 'REQUEST_PROJECTS';
 export const PROJECTS_ERROR = 'PROJECTS_ERROR';
 export const IS_REQUESTING_PROJECTS = 'IS_REQUESTING_PROJECTS';
 
-export const IS_REQUESTING_EDIT_METADATA = 'IS_REQUESTING_EDIT_METADATA'; 
-export const REQUEST_EDIT_METADATA = 'REQUEST_EDIT_METADATA'; 
-export const METADATA_ERROR = 'METADATA_ERROR'; 
+export const IS_REQUESTING_EDIT_METADATA = 'IS_REQUESTING_EDIT_METADATA';
+export const REQUEST_EDIT_METADATA = 'REQUEST_EDIT_METADATA';
+export const METADATA_ERROR = 'METADATA_ERROR';
 export const IS_REQUESTING_DIRECTORY = 'IS_REQUESTING_DIRECTORY';
 export const DIRECTORY_ERROR = 'DIRECTORY_ERROR';
 export const REQUEST_DIRECTORY = 'REQUEST_DIRECTORY';
@@ -29,7 +29,7 @@ export const PUBLISH_PROJECTS_ERROR = 'PUBLISH_PROJECTS_ERROR';
 
 /**
  * Request Unpublished Projects from API.
- * 
+ *
  * @param {Object} params
  * @param {Integer} limit
  * @param {Integer} offset
@@ -39,9 +39,9 @@ export const requestUnPublishProjects = (custodian, showAll) => (dispatch) => {
 
 	dispatch(isRequestingProjects());
 	
-	return post('RDL-Publish-ListProjects',{ "dataCustodian": custodian, "showAll": false, "showUningested": true })
-			.then((projects) => dispatch(requestProjectsSuccess(projects)))
-			.catch((error) => dispatch(requestProjectsError(error)));
+	return post('RDL-Publish-ListProjects',{ 'dataCustodian': custodian, 'showAll': false, 'showUningested': true })
+		.then((projects) => dispatch(requestProjectsSuccess(projects)))
+		.catch((error) => dispatch(requestProjectsError(error)));
 	
 	
 };
@@ -49,7 +49,7 @@ export const requestUnPublishProjects = (custodian, showAll) => (dispatch) => {
 
 /**
  * Request PUBLISH Project from API.
- * 
+ *
  * @param {String} projectName
  * @param {String} emailReport
  * @param {Bool} returnReport
@@ -61,9 +61,9 @@ export const requestPublishProject = ( projectName, emailReport, returnReport, p
 
 	dispatch(isRequestingPublishProjects());
 	
-	return post('RDL-Publish-ValidateProject', { "projectName": projectName, "emailReport": emailReport, "returnReport" : returnReport, "publish" : publish })
-			.then((publishProjects) => dispatch(requestPublishProjectsSuccess(publishProjects)))
-			.catch((error) => dispatch(requestPublishProjectsError(error)));
+	return post('RDL-Publish-ValidateProject', { 'projectName': projectName, 'emailReport': emailReport, 'returnReport' : returnReport, 'publish' : publish })
+		.then((publishProjects) => dispatch(requestPublishProjectsSuccess(publishProjects)))
+		.catch((error) => dispatch(requestPublishProjectsError(error)));
 };
 
 /**
@@ -86,7 +86,7 @@ export const requestPublishProjectsSuccess = (publishProjects) => ({
 /**
  * Prepare error to send to reducer.
  *
- * @param {Object} error 
+ * @param {Object} error
  * @return {Object}
  */
 export const requestPublishProjectsError = (error) => ({
@@ -100,7 +100,7 @@ export const requestPublishProjectsError = (error) => ({
 
 /**
  * Request INGEST Project from API.
- * 
+ *
  * @param {String} bucketName
  * @param {String} projectName
  * @param {String} dataCustodian
@@ -111,9 +111,9 @@ export const requestIngestProject = (bucketName, projectName, dataCustodian, fol
 
 	dispatch(isRequestingProjects());
 	
-	return postIngest('RDL-Ingest-Project', { "bucketName": bucketName, "projectName": projectName, "dataCustodian": dataCustodian, "folder" : folder })
-			.then((projects) => dispatch(requestProjectsSuccess(projects)))
-			.catch((error) => dispatch(requestProjectsError(error)));
+	return postIngest('RDL-Ingest-Project', { 'bucketName': bucketName, 'projectName': projectName, 'dataCustodian': dataCustodian, 'folder' : folder })
+		.then((projects) => dispatch(requestProjectsSuccess(projects)))
+		.catch((error) => dispatch(requestProjectsError(error)));
 };
 
 
@@ -121,24 +121,24 @@ export const requestIngestProject = (bucketName, projectName, dataCustodian, fol
 
 /**
  * Request Unpublished Projects from API.
- * 
- * @param {Custodian} 
- * @param {Show All} 
+ *
+ * @param {Custodian}
+ * @param {Show All}
  * @return {Promise}
  */
 export const requestUnIngestedProjects = (custodian, showAll) => (dispatch) => {
 
 	dispatch(isRequestingProjects());
 	
-	return post('RDL-Publish-ListProjects',{ "dataCustodian": custodian, "showAll": false, "showUningested": true })
-			.then((projects) => dispatch(requestProjectsSuccess(projects)))
-			.catch((error) => dispatch(requestProjectsError(error)));
+	return post('RDL-Publish-ListProjects',{ 'dataCustodian': custodian, 'showAll': false, 'showUningested': true })
+		.then((projects) => dispatch(requestProjectsSuccess(projects)))
+		.catch((error) => dispatch(requestProjectsError(error)));
 };
 
 
 /**
  * Request MetaData Directory from API.
- * 
+ *
  * @param project
  * @param list folder
  * @param recursive
@@ -149,9 +149,9 @@ export const requestProjectMetaDataDirectory = (project, listPath) => (dispatch)
 
 	dispatch(isRequestingDirectory());
 	
-	return post('RDL-Publish-ListContents',{ "projectName": project, "listFolder": listPath, "recursive": true, "listFiles": true  })
-			.then((directory) => dispatch(requestDirectorySuccess(directory)))
-			.catch((error) => dispatch(requestDirectoryError(error)));
+	return post('RDL-Publish-ListContents',{ 'projectName': project, 'listFolder': listPath, 'recursive': true, 'listFiles': true  })
+		.then((directory) => dispatch(requestDirectorySuccess(directory)))
+		.catch((error) => dispatch(requestDirectoryError(error)));
 	
 	
 };
@@ -182,7 +182,7 @@ export const requestDirectorySuccess = (directory) => ({
 /**
  * Prepare error to send to reducer.
  *
- * @param {Object} error 
+ * @param {Object} error
  * @return {Object}
  */
 export const requestDirectoryError = (error) => ({
@@ -193,7 +193,7 @@ export const requestDirectoryError = (error) => ({
 
 /**
  * Request Project MetaData from API.
- * 
+ *
  * @param {Object} params
  * @param {Integer} limit
  * @param {Integer} offset
@@ -203,7 +203,7 @@ export const requestProjectMetaData = (project, objectPath) => (dispatch) => {
 
 	dispatch(isRequestingMetaData());
 	
-	return post('RDL-Publish-ListMetadata',{ "projectName": project, "objectPath": objectPath, "recursive": false, "listFiles": true })
+	return post('RDL-Publish-ListMetadata',{ 'projectName': project, 'objectPath': objectPath, 'recursive': false, 'listFiles': true })
 			.then((metaData) => dispatch(requestMetaDataSuccess(metaData)))
 			.catch((error) => dispatch(requestMetaDataError(error)));
 	
@@ -230,16 +230,16 @@ export const requestMetaDataError = (error) =>({
 
 /**
  * Request Project Edit MetaData from API.
- * 
- * @param {Object} 
+ *
+ * @param {Object}
  * @return {Promise}
  */
 export const requestProjectEditMetaData = (project, objectPath, updates) => (dispatch) => {
 
 	dispatch(isRequestingEditMetaData());
-	return post('RDL-Publish-EditMetadata',{ "projectName": project, "objectPath": objectPath, "updates":updates })
-			.then((response) => dispatch(requestProjectEditMetaDataSuccess(response)))
-			.catch((error) => dispatch(requestProjectEditMetaDataError(error)));
+	return post('RDL-Publish-EditMetadata',{ 'projectName': project, 'objectPath': objectPath, 'updates':updates })
+		.then((response) => dispatch(requestProjectEditMetaDataSuccess(response)))
+		.catch((error) => dispatch(requestProjectEditMetaDataError(error)));
 	
 	
 };
@@ -308,7 +308,7 @@ export const requestProjectEditMetaDataSuccess = (response) => ({
 /**
  * Prepare error to send to reducer.
  *
- * @param {Object} error 
+ * @param {Object} error
  * @return {Object}
  */
 export const requestProjectEditMetaDataError = (error) => ({
@@ -321,7 +321,7 @@ export const requestProjectEditMetaDataError = (error) => ({
 /**
  * Prepare error to send to reducer.
  *
- * @param {Object} error 
+ * @param {Object} error
  * @return {Object}
  */
 export const requestProjectsError = (error) => ({
