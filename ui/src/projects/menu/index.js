@@ -44,16 +44,16 @@ render() {
     <div>
       <div>
         <Button variant="contained" color="primary"  onClick={() => { this.setState({view : 'INGEST'}) }}>
-          Ingest New Project
+          Ingest New Projects
           <FileUpload />
         </Button>
         <Button variant="contained" color="default"  onClick={() => { this.setState({view : 'UNPUBLISH'}) }}>
-          Manage Unpublished Project
+          Manage Unpublished Projects
           <Icon >send</Icon>
         </Button>
         <Button variant="contained" size="small"  onClick={() => { this.setState({view : 'PUBLISH'}) }}>
           <Save  />
-          Manage Published Project
+          Manage Published Projects
         </Button>
       </div>
       <div>

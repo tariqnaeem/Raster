@@ -43,7 +43,7 @@ class MetaDataDialog extends React.Component {
     super(props);
     
     this.state = {
-        ANZACId: "",
+        datasetId: "",
         datasetName: "",
         datasetOwnerId: "",
         organizationId : "",
@@ -53,7 +53,7 @@ class MetaDataDialog extends React.Component {
         open: false,
         folderChecked: [],
         fileChecked: [],
-        CPSGCode : "",
+        EPSGCode : "",
         informationAssetRegisterClassificationId : "",
         securityClassificationId : "",
         webServiceFlag :"",
@@ -90,7 +90,7 @@ class MetaDataDialog extends React.Component {
   editMetaData(event){
     let recursive = false;    
     let arrObjs = [];
-    let arrFields = [ "ANZACId",
+    let arrFields = [ "datasetId",
                             "datasetName",
                             "datasetOwnerId",
                             "organizationId",
@@ -103,7 +103,7 @@ class MetaDataDialog extends React.Component {
                             "downloadFlag"];
     
 
-    if( this.state.ANZLicId == "" || this.state.datasetName || this.state.organizationId == "" || 
+    if( this.state.datasetId == "" || this.state.datasetName || this.state.organizationId == "" || 
         this.state.datasetOwnerId == "" || this.state.publishCategory == "" ) {
             alert(' * fields are mandatory');
         }
@@ -317,7 +317,7 @@ class MetaDataDialog extends React.Component {
                         this.props.IsReadyMetaData && this.props.metaData.metadata.length == 0 ?
                         
                 <div>
-                    <TF name="ANZACId" change={this.change} mandatory={true}/>
+                    <TF name="datasetId" change={this.change} mandatory={true}/>
                     <TF name="datasetName" change={this.change} mandatory={true} />
                     <TF name="datasetOwnerId" change={this.change} mandatory={true} />
                     <TF name="organizationId" change={this.change} mandatory={true} />
