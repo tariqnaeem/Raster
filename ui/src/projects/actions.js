@@ -57,7 +57,7 @@ export const requestUnPublishProjects = (custodian, showAll) => (dispatch) => {
  * @return {Promise}
  */
 
-export const requestPublishProject = ( projectName, emailReport, returnReport, publish) => (dispatch) => {
+export const requestPublishProjects = ( projectName, emailReport, returnReport, publish) => (dispatch) => {
 
 	dispatch(isRequestingPublishProjects());
 	
