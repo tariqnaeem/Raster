@@ -12,22 +12,14 @@ import Views from '../views';
 import * as actions from '../actions';
 import { connect} from 'react-redux';
 import { getState } from '../reducer';
+import '../../app/style.css';
 
 
 
 const styles = theme => ({
   button: {
     margin: theme.spacing.unit,
-  },
-  leftIcon: {
-    marginRight: theme.spacing.unit,
-  },
-  rightIcon: {
-    marginLeft: theme.spacing.unit,
-  },
-  iconSmall: {
-    fontSize: 20,
-  },
+  }
 });
 
 class Menu extends React.Component {
@@ -36,13 +28,13 @@ class Menu extends React.Component {
     this.state = {
       view: 'INGEST',
     };
-}
+  }
 
 render() {
   
   return (
     <div>
-      <div>
+      <div className="body">
         <Button variant="contained" color="primary"  onClick={() => { this.setState({view : 'INGEST'}) }}>
           Ingest New Projects
           <FileUpload />

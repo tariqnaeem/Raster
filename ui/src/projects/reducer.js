@@ -36,11 +36,13 @@ const reducer = (state = initialState, action) => {
 				isReady: false,
 			};
 			break;
+
 		case IS_REQUESTING_PUBLISH_PROJECTS:
 			updated = {
 				IsReadyPublishProjects: false,
 			};
 			break;
+
 		case IS_PUBLISH_PROJECTS:
 			updated = {
 				IsReadyPublishProjects: true,
@@ -48,14 +50,13 @@ const reducer = (state = initialState, action) => {
 			};
 			break;
 		
-		case PUBLISH_PROJECTS_ERROR:	
-			
-				
-				updated = {
+		case PUBLISH_PROJECTS_ERROR:		
+			updated = {
 				Error : action.error,
 				IsReadyPublishProjects: true,
 			}
 			break;
+			
 		case IS_REQUESTING_EDIT_METADATA:
 			updated = {
 				IsReadyMetaData: false,
@@ -77,15 +78,12 @@ const reducer = (state = initialState, action) => {
 			updated = initialState;
 			break;
 		case PROJECTS_ERROR:
-			
 			updated = {
 				Error : action.error,
 				isReady: false,
 				projects : ""
 			}
-			
 			break;
-		
 		case IS_REQUESTING_DIRECTORY:
 			updated = {
 				isDirectory: false,
@@ -103,10 +101,10 @@ const reducer = (state = initialState, action) => {
 			}
 			break;
 		case REQUEST_METADATA:
-		updated = {
-			IsReadyMetaData: true,
-			metaData: action.metaData
-		}
+			updated = {
+				IsReadyMetaData: true,
+				metaData: action.metaData
+			}
 		break;
 		case DIRECTORY_ERROR:
 			updated = initialState;

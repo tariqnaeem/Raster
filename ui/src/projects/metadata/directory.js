@@ -23,12 +23,13 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import purple from "@material-ui/core/colors/purple";
 import Tooltip from '@material-ui/core/Tooltip';
 import FileIcon from '@material-ui/icons/FileDownload';
+import Folder from '../metadata/folder';
+
 class Directory extends React.Component {
   
 constructor(props) {
     super(props);
     this.state = {
-      open: false,
       openFolder : "",
       directory: [],
       projectName : this.props.projectName,
@@ -40,114 +41,70 @@ constructor(props) {
     this.openPanel = this.openPanel.bind(this);
     this.handleToggle = this.handleToggle.bind(this);
     this.handleFileToggle = this.handleFileToggle.bind(this);
- 
-  }
-  processDirectory(event){
-   this.props.requestProjectMetaDataDirectory(this.state.projectName, this.state.listFolder);
-   this.setState({ open: !(this.state.open) });
-   
-  }
-  openPanel(event, panel){
-    console.log(this.state.openFolder);
-    
+    this.isAccordionOpen = this.isAccordionOpen.bind(this);
+    this.openAccordion = this.openAccordion.bind(this);
+}
+
+openAccordion(id){
+    this.state[id] ? this.setState({[id]:!(this.state[id])}) : this.setState({[id]:true}); 
+}
+
+isAccordionOpen(id){
+    return this.state[id] ? this.state[id] : false;  
+}
+
+processDirectory(event){
+    this.props.requestProjectMetaDataDirectory(this.state.projectName, this.state.listFolder);
+    this.props.directoryIsOpen();
+}
+
+openPanel(event, panel){
     if(this.state.openFolder == panel){
         this.setState({ openFolder: "" });
     } else {
         this.setState({ openFolder: panel });
     }
-  }
+}
  
-  
-  handleClose(){
+handleClose(){
     this.setState({ open: !(this.state.open) ,directory :[] });
-    
-  }
+}
 
-  handleToggle(event, value) {
+handleToggle(value) {
     this.props.handleToggle(value);
-  }
+}
 
-  handleFileToggle(event, value){
+handleFileToggle(value){
    this.props.handleFileToggle(value);
 }
 
-  
-
-  render() {
-    
-
+render() {
+        
     const directory = this.props.directory ? this.props.directory.results : null;
 
     directory  && this.state.directory != directory.results ?  this.setState({directory: directory.results}) : '' ;
-
-    
     return (
-   
-       <div className="MetaDataDirectory">
-        <ExpansionPanel expanded={this.state.open} onChange={(event) => this.processDirectory(event)}>
+        <ExpansionPanel expanded={this.props.isOpen} onChange={(event) => this.processDirectory(event)}>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                 <Typography>Metadata File(s)</Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
-            <List>
-                {   this.props.directory && this.props.directory.results && this.props.directory.results.childItems ? 
+                <List>
+                    {   this.props.directory && this.props.directory.results && this.props.directory.results.childItems ? 
                     
-                    this.props.directory.results.childItems.map(obj => {
-                        let arrFolderPath =  obj.itemPath.split('/');
-                        return( <div key={"div"+arrFolderPath[arrFolderPath.length-1]}>
-                                        <ExpansionPanel expanded={this.state.openFolder == "folder"+arrFolderPath[arrFolderPath.length-1]} 
-                                                        key={"div"+arrFolderPath[arrFolderPath.length-1]}>
-                                            <ExpansionPanelSummary  expandIcon={<ExpandMoreIcon />}>
-                                                <Typography>
-                                                    <Checkbox   onChange={(event) => this.handleToggle(event, obj.itemPath)} 
-                                                                checked={this.props.folderChecked.indexOf(obj.itemPath) !== -1}/>
-                                                    <div className="Directory" onClick={(event) => this.openPanel(event, "folder"+arrFolderPath[arrFolderPath.length-1])}>
-                                                        <FolderIcon />{arrFolderPath[arrFolderPath.length-1]}
-                                                    </div>
-                                                </Typography>
-                                            </ExpansionPanelSummary>
-                                            <ExpansionPanelDetails>
-                                            {this.state.openFolder == "folder"+arrFolderPath[arrFolderPath.length-1] ?
-                                                    <div className="MetaDataFiles">
-                                                        <List component="nav">
-                                                            {obj.childItems && obj.childItems.map(fileObj => {
-                                                                let arrFilePath = fileObj.itemPath.split('/');
-                                                               
-                                                                    return(
-                                                                    <Tooltip        key={"tooltip-controlled"+fileObj.itemPath}
-                                                                                    placement="right-end"
-                                                                                    title={fileObj.itemPath}>
-                                                                        <ListItem key={fileObj.itemPath}>
-                                                                           
-                                                                                <Checkbox   onChange={(event) => this.handleFileToggle(event, fileObj.itemPath)}
-                                                                                            checked={this.props.fileChecked.indexOf(fileObj.itemPath) !== -1}/>
-                                                                                <FileIcon />
-                                                                            
-                                                                            <ListItemText primary={arrFilePath[arrFilePath.length-1]} />
-                                                                        </ListItem>
-                                                                    </Tooltip>)
-                                                               
-                                                            })
-                                                        }
-                                                            
-                                                        </List>
-                                                    </div> : ''}            
-                                            </ExpansionPanelDetails>
-                                        </ExpansionPanel>
-                                    </div>)
-                 
-               
-                        }) : <CircularProgress style={{ color: purple[500] }} thickness={4} /> }
-            </List>
+                        <Folder directory = {this.props.directory.results} 
+                                isAccordionOpen = {this.isAccordionOpen} 
+                                folderChecked = {this.props.folderChecked}
+                                openAccordion = {this.openAccordion}
+                                handleToggle= {this.handleToggle}
+                                handleFileToggle= {this.handleFileToggle}
+                                fileChecked={this.props.fileChecked}/>  : 
+                        
+                        <CircularProgress style={{ color: purple[500] }} thickness={4} /> 
+                    }
+                </List>
           </ExpansionPanelDetails>
-        </ExpansionPanel>
-            
-        
-   
-
-     
-    </div>)
-     
+        </ExpansionPanel>)
     }
 }
 export default connect(getState, actions)(Directory)

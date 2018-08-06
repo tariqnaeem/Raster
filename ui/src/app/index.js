@@ -5,7 +5,6 @@ import './style.css';
 
 const App = () => (
 	<div className="App">
-		
 		<Menu />
 	</div>
 );

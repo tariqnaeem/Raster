@@ -27,7 +27,7 @@ import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import {EPSG_CODES, SPATIAL, DISCLAIMER_ID, 
         SECURITY_CLASSIFICATION_ID, LICENCE_TYPE, 
-        INFORMATION_ASSET, BOOL} from '../../constants';
+        INFORMATION_ASSET, BOOL, META_DATA_FORM} from '../../constants';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import DDL from '../metadata/dropdown';
@@ -60,24 +60,28 @@ class MetaDataDialog extends React.Component {
         disclaimerId:"",
         licenceId:"",
         downloadFlag:"",
-        spatial :""
+        spatial :"",
+        metaDataAccordionIsOpen  : false
     };
       
-    this.handleClose = this.handleClose.bind(this);
-    this.editMetaData = this.editMetaData.bind(this);
-    this.handleClickOpen = this.handleClickOpen.bind(this);
-    this.handleToggle = this.handleToggle.bind(this);
-    this.handleFileToggle = this.handleFileToggle.bind(this);
-    this.change = this.change.bind(this);
-    this.get = this.get.bind(this);
-  }
-   get(name){
-    console.log(name);
-    console.log(this.state[name]);   
-    return this.state[name];
-   }
-  change(name, value){
+        this.handleClose = this.handleClose.bind(this);
+        this.editMetaData = this.editMetaData.bind(this);
+        this.handleClickOpen = this.handleClickOpen.bind(this);
+        this.handleToggle = this.handleToggle.bind(this);
+        this.handleFileToggle = this.handleFileToggle.bind(this);
+        this.change = this.change.bind(this);
+        this.directoryIsOpen = this.directoryIsOpen.bind(this);
+        this.getDDLItems = this.getDDLItems.bind(this);
+        this.IsDDL = this.IsDDL.bind(this);
+    }
+    directoryIsOpen(){
+      this.setState({metaDataAccordionIsOpen : !(this.state.metaDataAccordionIsOpen)});
+    }
+    
+  change(name, value){ 
+    
     this.setState({[name]: value});
+    console.log(this.state[name] +'  '+value)
   }
   handleClickOpen(event, folder){
     this.setState({ open: true, folderName:folder});
@@ -90,12 +94,12 @@ class MetaDataDialog extends React.Component {
   editMetaData(event){
     let recursive = false;    
     let arrObjs = [];
-    let arrFields = [ "datasetId",
-                            "datasetName",
-                            "datasetOwnerId",
-                            "organizationId",
-                            "publishCategory",
-                            "informationAssetRegisterClassificationId",
+    let arrFields = [   "datasetId",
+                        "datasetName",
+                        "datasetOwnerId",
+                        "organizationId",
+                        "publishCategory",
+                        "informationAssetRegisterClassificationId",
                             "securityClassificationId",
                             "webServiceFlag",
                             "disclaimerId",
@@ -174,7 +178,7 @@ class MetaDataDialog extends React.Component {
         const { folderChecked } = this.state;
         const currentIndex = folderChecked.indexOf(value);
         const newChecked = [...folderChecked];
-
+        
         if (currentIndex === -1) {
                 newChecked.push(value);
                 this.setState({ downloadFlag : null, webServiceFlag : "", 
@@ -184,13 +188,12 @@ class MetaDataDialog extends React.Component {
         newChecked.splice(currentIndex, 1);
         }
         this.setState({folderChecked: newChecked});
-
-        
-
-            console.log(newChecked);
     }
 
+    
+
     handleFileToggle(value){
+        console.log(value);
         const { fileChecked } = this.state;
         const currentIndex = fileChecked.indexOf(value);
         const newChecked = [...fileChecked];
@@ -205,156 +208,82 @@ class MetaDataDialog extends React.Component {
         console.log(newChecked);
     }
 
+    getDDLItems(item){
+        return  item == "disclaimerId" ? DISCLAIMER_ID : 
+                item == "securityClassificationId" ? SECURITY_CLASSIFICATION_ID :
+                item == "licenceId" ? LICENCE_TYPE :
+                item == "informationAssetRegisterClassificationId" ? INFORMATION_ASSET : BOOL
+    }
+
+    IsDDL(item){
+        if( item == "downloadFlag"  || item =="webServiceFlag" || item == "disclaimerId"  || 
+            item == "securityClassificationId" || item == "licenceId" || item == "informationAssetRegisterClassificationId") 
+            return true;
+        else
+            return false;
+    }
+
     render() {
         
         let arrFolderPath = this.props.folderName.split('/');
         if(this.state.folderName != this.props.folderName ){
             this.setState({ folderName: this.props.folderName, projectName: this.props.projectName})
         }
-
+        
         return (
         <div>
-            
             <IconButton aria-label={this.props.folderName} onClick={event => this.handleClickOpen(event, this.props.folderName)}>
                 <FolderIcon />
             </IconButton>
             {arrFolderPath[arrFolderPath.length-1]}
-            <Dialog
-            fullScreen
-            open={this.state.open}
-            onClose={this.handleClose}
-            TransitionComponent={Transition}>
+            <Dialog fullScreen open={this.state.open} onClose={this.handleClose} TransitionComponent={Transition}>
+                <DialogTitle id="form-dialog-title">{"Folder : " + this.props.folderName}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        {"Project : " + this.props.projectName}
+                    </DialogContentText>
+                        {
+                            this.props.IsReadyMetaData  ?  this.props.metaData.metadata.map(item => {
+                             
+                            //this.arrFields.map(item => {
+                            
+                        return(
 
-            <DialogTitle id="form-dialog-title">{"Folder : " + this.props.folderName}</DialogTitle>
-            <DialogContent>
-                <DialogContentText>
-                {"Project : "+this.props.projectName}
-                </DialogContentText>
-                    {
-                        this.props.IsReadyMetaData  ?  this.props.metaData.metadata.map(item => {
-                            
-                            
-                            return(
-                                (item.name == "downloadFlag" || item.name =="webServiceFlag" || 
-                                item.name == "disclaimerId" || item.name == "securityClassificationId" || 
-                                item.name == "licenceId" || item.name == "informationAssetRegisterClassificationId") ? 
+                                this.IsDDL(item.name) ? 
                                 <div>
-                                    <InputLabel htmlFor={"select"+item.name}>{item.name}</InputLabel>
-                                        {item.name == "disclaimerId" ?  
-                                            <Select value={this.state[item.name] ? this.state[item.name] : this.setState({[item.name] : item.value }) }
-                                                    onChange={event => this.setState({[item.name]: event.target.value})} 
-                                                    style={{width:200}}
-                                                    inputProps={{
-                                                        name: item.name,
-                                                        id: "select"+item.name
-                                                      }}>
-                        
-                                           {DISCLAIMER_ID.map(item => (
-                                                <MenuItem key={item} value={item}>{item}</MenuItem>
-                                            ))}
-                                            </Select>: item.name == "securityClassificationId" ? 
-                                            <Select value={this.state[item.name] ? this.state[item.name] : this.setState({[item.name] : item.value }) }
-                                            onChange={event => this.setState({[item.name]: event.target.value})} 
-                                            style={{width:200}}
-                                            inputProps={{
-                                                name: item.name,
-                                                id: "select"+item.name
-                                              }}>
-                
-                                   {SECURITY_CLASSIFICATION_ID.map(item => (
-                                        <MenuItem key={item} value={item}>{item}</MenuItem>
-                                    ))}
-                                    </Select> : item.name =="licenceId" ? 
-                                    <Select value={this.state[item.name] ? this.state[item.name] : this.setState({[item.name] : item.value }) }
-                                            onChange={event => this.setState({[item.name]: event.target.value})} 
-                                            style={{width:200}}
-                                            inputProps={{
-                                                name: item.name,
-                                                id: "select"+item.name
-                                              }}>
-                
-                                   {LICENCE_TYPE.map(item => (
-                                        <MenuItem key={item} value={item}>{item}</MenuItem>
-                                    ))}
-                                    </Select> : item.name =="informationAssetRegisterClassificationId" ? 
-                                    <Select value={this.state[item.name] ? this.state[item.name] : this.setState({[item.name] : item.value }) }
-                                            onChange={event => this.setState({[item.name]: event.target.value})} 
-                                            style={{width:200}}
-                                            inputProps={{
-                                                name: item.name,
-                                                id: "select"+item.name
-                                              }}>
-                
-                                   {INFORMATION_ASSET.map(item => (
-                                        <MenuItem key={item} value={item}>{item}</MenuItem>
-                                    ))}
-                                    </Select>  :
-                                            <Select value={this.state[item.name] ? this.state[item.name] : this.setState({[item.name] : item.value }) }
-                                                    onChange={event => this.setState({[item.name]: event.target.value})} 
-                                                    style={{width:200}} key={item.name}
-                                                    inputProps={{
-                                                        name: item.name,
-                                                        id: "select"+item.name
-                                                      }}>
-                                                <MenuItem key="N" value="N">N</MenuItem>
-                                                <MenuItem key="Y" value="Y">Y</MenuItem>
-                                            </Select>}
-                                        </div>  :
-                                    <TextField
-                                        autoFocus
-                                        style={{width:450}}
-                                        key={item.name}
-                                        value={this.state[item.name] ? this.state[item.name] : item.value}
-                                        label={item.name}
-                                        required={true}
-                                        onChange = {(event) => this.setState({ [item.name]: event.target.value })}
-                                        type="text" margin="dense"/>
+                                    <DDL name={item.name} items={this.getDDLItems(item.name)} change={this.change} value={this.state[item.name] ? this.state[item.name] : item.value  } />
+                                </div>  :
+                                <TF name={item.name} change={this.change} mandatory={true} value={this.state[item.name] ? this.state[item.name] : item.value}/>
                                 
                             )}): <CircularProgress style={{ color: purple[500] }} thickness={4} />
-                    }
+                        }
 
                     {
                         this.props.IsReadyMetaData && this.props.metaData.metadata.length == 0 ?
                         
                 <div>
-                    <TF name="datasetId" change={this.change} mandatory={true}/>
-                    <TF name="datasetName" change={this.change} mandatory={true} />
-                    <TF name="datasetOwnerId" change={this.change} mandatory={true} />
-                    <TF name="organizationId" change={this.change} mandatory={true} />
-                    <TF name="publishCategory" change={this.change} mandatory={true} />
-                    <DDL    name="securityClassificationId" get={this.get} items={SECURITY_CLASSIFICATION_ID} 
-                            change={this.change} />
-                    <DDL name="informationAssetRegisterClassificationId" get={this.get} items={INFORMATION_ASSET} change={this.change} />
-                    <DDL name="licenceId" items={LICENCE_TYPE} get={this.get} change={this.change} />
-                    <DDL name="disclaimerId" items={DISCLAIMER_ID} get={this.get} change={this.change} />
-                    <DDL name="webServiceFlag" items={BOOL} get={this.get} change={this.change} />
-                    <DDL name="downloadFlag" items={BOOL} get={this.get} change={this.change} />
-                </div> : ''
-                    }
-                        {
-                   
-                        this.state.fileChecked.length > 0 && this.props.IsReadyMetaData ? 
+                    <TF name="datasetId" change={this.change} mandatory={true} value={this.state.datasetId ? this.state.datasetId : ''}/>
+                    <TF name="datasetName" change={this.change} mandatory={true} value={this.state.datasetName ? this.state.datasetName : ''} />
+                    <TF name="datasetOwnerId" change={this.change} mandatory={true} value={this.state.datasetOwnerId ? this.state.datasetOwnerId : ''} />
+                    <TF name="organizationId" change={this.change} mandatory={true} value={this.state.organizationId ? this.state.organizationId : ''} />
+                    <TF name="publishCategory" change={this.change} mandatory={true} value={this.state.publishCategory ? this.state.publishCategory : ''} />
+                    <DDL name="securityClassificationId"  items={SECURITY_CLASSIFICATION_ID} change={this.change} value={''} />
+                    <DDL name="informationAssetRegisterClassificationId" items={INFORMATION_ASSET} change={this.change} value={''} />
+                    <DDL name="licenceId" items={LICENCE_TYPE} change={this.change} value={''} />
+                    <DDL name="disclaimerId" items={DISCLAIMER_ID} change={this.change} value={''} />
+                    <DDL name="webServiceFlag" items={BOOL} change={this.change} value={''} />
+                    <DDL name="downloadFlag" items={BOOL} change={this.change} value={''} />
+                </div> : ''}
+
+                    {this.state.fileChecked.length > 0 && this.props.IsReadyMetaData ? 
                         <div>    
                             <FormControl>
-                                <InputLabel htmlFor="select-multiple">CPSG Code</InputLabel>
-                                <Select value={this.state.CPSGCode ? this.state.CPSGCode : "" } onChange={event => this.setState({CPSGCode: event.target.value})} style={{width:200}}>
-                                {   EPSG_CODES.map(item => (
-                                        <MenuItem key={item} value={item}>{item}</MenuItem>
-                                    ))
-                                }
-                                </Select>
+                                <DDL name="CPSGCode" items={EPSG_CODES} change={this.change} value={this.state.CPSGCode ? this.state.CPSGCode : "" } />
                             </FormControl>
-                            <FormControl>
-                                <InputLabel htmlFor="select-multiple">Spatial</InputLabel>
-                                <Select value={this.state.spatial ? this.state.spatial : ""} onChange={event => this.setState({spatial: event.target.value})} style={{width:200}}>
-                                {   SPATIAL.map(item => (
-                                        <MenuItem key={item} value={item}> {item} </MenuItem>
-                                    ))
-                                }
-                                </Select>
+                            <FormControl>        
+                                <DDL name="Spatial" items={SPATIAL} change={this.change} value={this.state.spatial ? this.state.spatial : ""} />
                             </FormControl>
-                        </div> : ''
-                    }
+                        </div> : ''}
                     <List>
                         {this.props.metaData && this.props.IsReadyMetaData  ? 
                         <ListItem>
@@ -363,7 +292,9 @@ class MetaDataDialog extends React.Component {
                                         handleToggle={this.handleToggle} 
                                         handleFileToggle={this.handleFileToggle} 
                                         folderChecked={this.state.folderChecked}
-                                        fileChecked={this.state.fileChecked} />
+                                        fileChecked={this.state.fileChecked}
+                                        isOpen={this.state.metaDataAccordionIsOpen}
+                                        directoryIsOpen = {this.directoryIsOpen}/>
                         </ListItem> : ''} 
                     </List>
                     </DialogContent>
@@ -371,7 +302,6 @@ class MetaDataDialog extends React.Component {
                         <Button onClick={this.handleClose} color="primary">Cancel</Button>
                         <Button onClick={(event) => this.editMetaData(event)} color="primary">Save</Button>
                     </DialogActions>
-                
             </Dialog>
         </div>
         );

@@ -15,5 +15,16 @@ export const LICENCE_TYPE = [   'General',
                                 'Departmental'];
 export const INFORMATION_ASSET = ['Information', 'Critical', 'Significant'];
 export const EPSG_CODES = ['28355', '28354', '3111', '4326', '3857', '4283', '7854', '7855', '7899', '1168'];
-export const SPATIAL = ['tiles', 'mosaic', 'mosaicFootprint', 'tileIndex', 'centerPoints','thumbnails','frames', 'contours', 'irregularPoints', 'regularSurface']
+export const SPATIAL = ['tiles', 'mosaic', 'mosaicFootprint', 
+                        'tileIndex', 'centerPoints','thumbnails',
+                        'frames', 'contours', 'irregularPoints', 
+                        'regularSurface'];
+export const META_DATA_FORM = [{'datasetId' : 'Dataset ID', 
+                                'datasetName' : 'Name',
+                                'datasetOwnerId' : 'Owner ID',
+                                'organizationId' : 'Org ID',
+                                'publishCategory' : 'Category',
+                                'securityClassificationId': 'Classification ID',
+                                'informationAssetRegisterClassificationId' : 'Information Asset Register Classification ID'
+                            }]
 
